@@ -10,7 +10,6 @@
 			<div class="form-row">
 			  <div class="col">
 				<h1>Atendimentos</h1>
-				<p><%=atendimentos%></p>				
 			  </div>
 			  <div class="col-4">
 				<h3>Resultado da Busca</h3>
@@ -26,8 +25,10 @@
 
 		<br>
 		<hr>
-		<br>
-		<nav class="navbar navbar-light bg-secondary ">
+		<div class="botoes">
+			<a class="btn btn-outline-success mb-2 ml-auto" href="#"><i class="fas fa-file-excel"></i> Exportar</a>
+		</div>
+		<nav class="navbar navbar-dark bg-secondary ">
 			<form class="form-inline ml-auto">
 				<select class="form-control mr-2">
 					<option>Selecione o número</option>
@@ -37,13 +38,14 @@
 					<option>4</option>
 					<option>5</option>
 				</select>
-
+				<b class="nav-item nav-link">Período: &nbsp&nbsp </b>
 				<input class="form-control mr-2" type="date" placeholder="Input padrão">
 				<input class="form-control mr-2" type="date" placeholder="Input padrão">
+				<b class="nav-item nav-link">Horário: &nbsp&nbsp </b>
 				<input class="form-control mr-2" type="time" placeholder="Input padrão">
-				<input class="form-control mr-2" type="time" placeholder="Input padrão">
+				<input class="form-control mr-3" type="time" placeholder="Input padrão">
 	
-			  <button class="btn btn-success my-2 my-sm-0" type="submit">Pesquisar</button>
+			  <button class="btn btn-success my-2 my-sm-1" type="submit">Pesquisar</button>
 			</form>
 		  </nav>
 		<br>
@@ -51,7 +53,7 @@
 		<table class="table table-striped">
 			<thead>
 			  <tr>
-				<th scope="col">#</th>
+				<th scope="col"><%=atendimentos%></th>
 				<th scope="col">Telefone</th>
 				<th scope="col">Data</th>
 				<th scope="col">Hora</th>
