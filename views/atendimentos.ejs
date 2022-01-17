@@ -1,14 +1,51 @@
 
 <%- include ("partials/head.ejs"); %>
 <body>
+	<%- include ("partials/header.ejs"); %>
 	<%- include ("partials/side.ejs"); %>
 
-	<div class="container">
-		<h1>Atendimentos</h1>
-		<p><%=atendimentos%></p>
+	<div class="painel">
+		<br>
+		<form>
+			<div class="form-row">
+			  <div class="col">
+				<h1>Atendimentos</h1>
+				<p><%=atendimentos%></p>				
+			  </div>
+			  <div class="col-4">
+				<h3>Resultado da Busca</h3>
+				<span>Encontradas: </span><span>1292</span><br>
+				<span>Anonimo: </span><span>7</span><br>
+				<span>Telefone: </span><span>08005555300</span>
+				<h6>Periodo</h6>
+				<span>De: </span><span>12/10/2021 as 15:00</span>
+				<span>Até: </span><span>12/10/2021 as 20:00</span>
+			  </div>
+			</div>
+		  </form>
 
 		<br>
 		<hr>
+		<br>
+		<nav class="navbar navbar-light bg-secondary ">
+			<form class="form-inline ml-auto">
+				<select class="form-control mr-2">
+					<option>Selecione o número</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+
+				<input class="form-control mr-2" type="date" placeholder="Input padrão">
+				<input class="form-control mr-2" type="date" placeholder="Input padrão">
+				<input class="form-control mr-2" type="time" placeholder="Input padrão">
+				<input class="form-control mr-2" type="time" placeholder="Input padrão">
+	
+			  <button class="btn btn-success my-2 my-sm-0" type="submit">Pesquisar</button>
+			</form>
+		  </nav>
 		<br>
 
 		<table class="table table-striped">

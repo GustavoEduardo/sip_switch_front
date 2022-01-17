@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 //Listar todos os atendimentos
-router.get("/atendimento", (req,res) =>{
+router.get("/atendimentos", (req,res) =>{
 	let atendimentos = "axios aqui"
     
     res.render("atendimentos", {atendimentos});
