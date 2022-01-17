@@ -3,10 +3,10 @@ const router = express.Router();
 
 
 //Listar todos os atendimentos
-router.get("/admin/sellers", adminAuth, (req,res) =>{
+router.get("/atendimento", (req,res) =>{
 	let atendimentos = "axios aqui"
     
-    res.render("/atendimentos", {atendimentos});
+    res.render("atendimentos", {atendimentos});
 		
 });
 

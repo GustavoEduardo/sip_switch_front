@@ -1,15 +1,53 @@
-  
-<!DOCTYPE html>
-<html lang="pt-br">
-<%- include ("partials/head.ejs"); %>
-<link rel="stylesheet" type="text/css" href="/css/index.css">
-<body>
-	<%- include ("partials/header.ejs"); %>
 
-	<h1>Atendimentos</h1>
+<%- include ("partials/head.ejs"); %>
+<body>
+	<%- include ("partials/side.ejs"); %>
+
+	<div class="container">
+		<h1>Atendimentos</h1>
+		<p><%=atendimentos%></p>
+
+		<br>
+		<hr>
+		<br>
+
+		<table class="table table-striped">
+			<thead>
+			  <tr>
+				<th scope="col">#</th>
+				<th scope="col">Primeiro</th>
+				<th scope="col">Último</th>
+				<th scope="col">Nickname</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr>
+				<th scope="row">1</th>
+				<td>Mark</td>
+				<td>Otto</td>
+				<td>@mdo</td>
+			  </tr>
+			  <tr>
+				<th scope="row">2</th>
+				<td>Jacob</td>
+				<td>Thornton</td>
+				<td>@fat</td>
+			  </tr>
+			  <tr>
+				<th scope="row">3</th>
+				<td>Larry</td>
+				<td>the Bird</td>
+				<td>@twitter</td>
+			  </tr>
+			</tbody>
+		  </table>
+
+	</div>
+	
 	
 
-	<%- include ("partials/footer1.ejs"); %>
+	<%- include ("partials/footer.ejs"); %>
+	
 
 </body>
 </html>
