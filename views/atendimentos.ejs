@@ -13,12 +13,12 @@
 			  </div>
 			  <div class="col-4">
 				<h3>Resultado da Busca</h3>
-				<span>Encontradas: </span><span>1292</span><br>
-				<span>Anonimo: </span><span>7</span><br>
-				<span>Telefone: </span><span>08005555300</span>
+				<span>Encontradas: </span><span id="total"></span><br>
+				<span>Anonimo: </span><span id="anonimo"></span><br>
+				<span>Telefone: </span><span id="telefone"></span>
 				<h6>Periodo</h6>
-				<span>De: </span><span>12/10/2021 as 15:00</span>
-				<span>Até: </span><span>12/10/2021 as 20:00</span>
+				<span>De: </span><span id="de"></span><span id="hrDe"></span><br>
+				<span>Até: </span><span id="ate"></span><span id="hrAte"></span>
 			  </div>
 			</div>
 		  </form>
@@ -30,59 +30,103 @@
 		</div>
 		<nav class="navbar navbar-dark bg-secondary ">
 			<form class="form-inline ml-auto">
-				<select class="form-control mr-2">
+				<select class="form-control mr-2" id="tel">
 					<option>Selecione o número</option>
-					<option>1</option>
+					<option value="08008783955">08008783955</option>
 					<option>2</option>
 					<option>3</option>
 					<option>4</option>
 					<option>5</option>
 				</select>
 				<b class="nav-item nav-link">Período: &nbsp&nbsp </b>
-				<input class="form-control mr-2" type="date" placeholder="Input padrão">
-				<input class="form-control mr-2" type="date" placeholder="Input padrão">
+				<input class="form-control mr-2" type="date" placeholder="Input padrão" id="dtInit">
+				<input class="form-control mr-2" type="date" placeholder="Input padrão" id="dtFim">
 				<b class="nav-item nav-link">Horário: &nbsp&nbsp </b>
-				<input class="form-control mr-2" type="time" placeholder="Input padrão">
-				<input class="form-control mr-3" type="time" placeholder="Input padrão">
+				<input class="form-control mr-2" type="time" placeholder="Input padrão" id="hrInit">
+				<input class="form-control mr-3" type="time" placeholder="Input padrão" id="hrFim">
 	
-			  <button class="btn btn-success my-2 my-sm-1" type="submit">Pesquisar</button>
+			  <button class="btn btn-success my-2 my-sm-1" type="submit" onclick="buscarLigacoes()">Pesquisar</button>
 			</form>
 		  </nav>
 		<br>
 
-		<table class="table table-striped">
+		<table class="table table-striped" id="tabela">
 			<thead>
 			  <tr>
-				<th scope="col"><%=atendimentos%></th>
 				<th scope="col">Telefone</th>
 				<th scope="col">Data</th>
 				<th scope="col">Hora</th>
+				<th scope="col">Duração</th>
 			  </tr>
 			</thead>
-			<tbody>
-			  <tr>
-				<th scope="row">1</th>
-				<td>5511965847547</td>
-				<td>12/10/2021</td>
-				<td>15:35</td>
-			  </tr>
-			  <tr>
-				<th scope="row">2</th>
-				<td>5514932654875</td>
-				<td>12/10/2021</td>
-				<td>15:36</td>
-			  </tr>
-			  <tr>
-				<th scope="row">3</th>
-				<td>5521954774125</td>
-				<td>12/10/2021</td>
-				<td>15:38</td>
-			  </tr>
+			<tbody id="lista">
+			 
+			
 			</tbody>
 		  </table>
 
 	</div>
 	</div>
+
+	<script>
+
+		var axiosConfig= {
+				headers: {
+					authorization: "Bearer "+ localStorage.getItem("token")
+				}
+			}
+
+		function buscarLigacoes(){
+
+		
+			var telefone = document.getElementById('tel').value;			
+			var dtInit = document.getElementById('dtInit').value;
+			var dtFim = document.getElementById('dtFim').value;
+			var hrInit = document.getElementById('hrInit').value;
+			var hrFim = document.getElementById('hrFim').value;
+
+			axios.get(`http://localhost:3030/ligacao-receptiva/${telefone}?dtInicial=${dtInit}&dtFinal=${dtFim}&hrInicial=${hrInit}&hrFinal=${hrFim}`).then( response => {
+
+				var calls = response.data.result;
+
+				calls.forEach(call => {
+
+					var item = document.createElement("tr");
+					var td1 = document.createElement("td");
+					td1.innerHTML = call.src;
+					item.appendChild(td1);
+
+					var td2 = document.createElement("td");
+					td2.innerHTML = call.data;
+					item.appendChild(td2);
+
+					var td3 = document.createElement("td");
+					td3.innerHTML = call.hora;
+					item.appendChild(td3);
+
+					var td4 = document.createElement("td");
+					td4.innerHTML = call.duration;
+					item.appendChild(td4);
+					item.setAttribute('data-id',call.uniqueid);
+					
+					lista.appendChild(item);
+
+					document.getElementById('total').innerHTML = calls.length;
+					document.getElementById('telefone').innerHTML = telefone;
+					document.getElementById('de').innerHTML = dtInit;
+					document.getElementById('ate').innerHTML = dtFim;
+					document.getElementById('hrDe').innerHTML = hrInit;
+					document.getElementById('hrAte').innerHTML = hrFim;
+				});
+			}).catch( err => { 
+				console.log(err);
+			});
+
+		}
+
+
+
+	</script>
 	
 	
 
