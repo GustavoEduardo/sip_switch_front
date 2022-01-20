@@ -27,10 +27,10 @@ app.use('/',atendimentoController);
 
 
 //Iniciando o servidor
-app.listen(4000,(err) =>{
+app.listen(4001,(err) =>{
 	if(err){
 		console.log(err)
 	}else{
-		console.log("Front rodando na porta 4000.")
+		console.log("Front rodando na porta 4001.")
 	}
 });

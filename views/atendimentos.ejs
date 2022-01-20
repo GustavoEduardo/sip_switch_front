@@ -1,5 +1,6 @@
 
 <%- include ("partials/head.ejs"); %>
+
 <body style="background-color: rgb(230, 230, 230);">
 	<%- include ("partials/header.ejs"); %>
 
@@ -17,8 +18,8 @@
 				<span>Anonimo: </span><span id="anonimo"></span><br>
 				<span>Telefone: </span><span id="telefone"></span>
 				<h6>Periodo</h6>
-				<span>De: </span><span id="de"></span><span id="hrDe"></span><br>
-				<span>Até: </span><span id="ate"></span><span id="hrAte"></span>
+				<span>De: </span><span id="de"></span>&nbsp <span id="hrDe"></span><br>
+				<span>Até: </span><span id="ate"></span>&nbsp <span id="hrAte"></span>
 			  </div>
 			</div>
 		  </form>
@@ -26,17 +27,13 @@
 		<br>
 		<hr>
 		<div class="botoes">
-			<a class="btn btn-outline-success mb-2 ml-auto" href="#"><i class="fas fa-file-excel"></i> Exportar</a>
+			<a class="btn btn-outline-success mb-2 ml-auto" target="_blank" href=""><i class="fas fa-file-excel"></i> Exportar</a>
 		</div>
 		<nav class="navbar navbar-dark bg-secondary ">
 			<form class="form-inline ml-auto">
 				<select class="form-control mr-2" id="tel">
 					<option>Selecione o número</option>
-					<option value="08008783955">08008783955</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
+					
 				</select>
 				<b class="nav-item nav-link">Período: &nbsp&nbsp </b>
 				<input class="form-control mr-2" type="date" placeholder="Input padrão" id="dtInit">
@@ -68,70 +65,8 @@
 	</div>
 	</div>
 
-	<script>
-
-		var axiosConfig= {
-				headers: {
-					authorization: "Bearer "+ localStorage.getItem("token")
-				}
-			}
-
-		function buscarLigacoes(){
-
-		
-			var telefone = document.getElementById('tel').value;			
-			var dtInit = document.getElementById('dtInit').value;
-			var dtFim = document.getElementById('dtFim').value;
-			var hrInit = document.getElementById('hrInit').value;
-			var hrFim = document.getElementById('hrFim').value;
-
-			axios.get(`http://localhost:3030/ligacao-receptiva/${telefone}?dtInicial=${dtInit}&dtFinal=${dtFim}&hrInicial=${hrInit}&hrFinal=${hrFim}`).then( response => {
-
-				var calls = response.data.result;
-
-				calls.forEach(call => {
-
-					var item = document.createElement("tr");
-					var td1 = document.createElement("td");
-					td1.innerHTML = call.src;
-					item.appendChild(td1);
-
-					var td2 = document.createElement("td");
-					td2.innerHTML = call.data;
-					item.appendChild(td2);
-
-					var td3 = document.createElement("td");
-					td3.innerHTML = call.hora;
-					item.appendChild(td3);
-
-					var td4 = document.createElement("td");
-					td4.innerHTML = call.duration;
-					item.appendChild(td4);
-					item.setAttribute('data-id',call.uniqueid);
-					
-					lista.appendChild(item);
-
-					document.getElementById('total').innerHTML = calls.length;
-					document.getElementById('telefone').innerHTML = telefone;
-					document.getElementById('de').innerHTML = dtInit;
-					document.getElementById('ate').innerHTML = dtFim;
-					document.getElementById('hrDe').innerHTML = hrInit;
-					document.getElementById('hrAte').innerHTML = hrFim;
-				});
-			}).catch( err => { 
-				console.log(err);
-			});
-
-		}
-
-
-
-	</script>
-	
-	
-
 	<%- include ("partials/footer.ejs"); %>
-	
+	<script type="text/javascript" src="/js/atendimentos.js"></script>
 
 </body>
 </html>
