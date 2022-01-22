@@ -27,7 +27,7 @@ app.use('/',atendimentoController);
 
 
 //Iniciando o servidor
-app.listen(4001,(err) =>{
+app.listen(3031,(err) =>{
 	if(err){
 		console.log(err)
 	}else{

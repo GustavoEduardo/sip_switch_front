@@ -6,6 +6,24 @@
         }
     }
 
+    function getMidias(){
+        axios.get(`http://localhost:${port}/midia`).then( response => {
+            var midias = response.data.result;
+
+            midias.forEach(m => {
+                var option = document.createElement("option");
+                option.innerHTML = m.nome;
+                option.value = m.telefone
+                tel.appendChild(option);
+            });
+        }).catch( err => { 
+            console.log(err);
+        });
+
+    }
+
+    //getMidias()
+
     function buscarLigacoes(){
 
         var telefone = document.getElementById('tel').value;		
@@ -23,7 +41,6 @@
 
         axios.get(`http://localhost:${port}/ligacao-receptiva/${telefone}?dtInicial=${dtInit}&dtFinal=${dtFim}&hrInicial=${hrInit}&hrFinal=${hrFim}`).then( response => {
             var calls = response.data.result;
-            
             calls.forEach(call => {
 
                 var item = document.createElement("tr");
@@ -59,15 +76,4 @@
 
     }
 
-    axios.get(`http://localhost:${port}/midia`).then( response => {
-        var midias = response.data.result;
-
-        midias.forEach(m => {
-            var option = document.createElement("option");
-            option.innerHTML = m.nome;
-            option.value = m.telefone
-            tel.appendChild(option);
-        });
-    }).catch( err => { 
-        console.log(err);
-    });
+    
