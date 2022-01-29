@@ -1,0 +1,13 @@
+const Router = require('express').Router;
+const Controller = require('../controllers/MidiaController');
+
+const MidiaRoutes = Router();
+MidiaRoutes.route('/midias').get(Controller.listar);
+MidiaRoutes.route('/midia-cadastrar').get(Controller.nova);
+MidiaRoutes.route('/midia-cadastrar').post(Controller.create);
+MidiaRoutes.route('/midia-deletar').post(Controller.delete);
+MidiaRoutes.route('/midia-editar/:id').get(Controller.editar);
+MidiaRoutes.route('/alterarmidia').post(Controller.update);
+
+
+module.exports = MidiaRoutes;

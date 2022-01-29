@@ -4,3 +4,17 @@
     background-color: #2d204e;
 }
 
+.centro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.link:hover{
+    background-color: #5644866b;
+    line-height: 110%;
+    border-radius: 1px;
+}
+

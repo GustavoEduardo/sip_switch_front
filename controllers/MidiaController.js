@@ -1,0 +1,54 @@
+const Connect  = require('../database/Connect');
+const moment = require('moment');
+
+
+class MidiaController{
+
+    async listar(req,res){
+        let midias = await Connect("midia").select();
+        return res.render("midia/midias", {midias});
+    }
+
+    async nova(req,res){        
+        return res.render("midia/novamidia");
+    } 
+
+    async create(req,res){
+        let midia = {
+            ...req.body
+        }
+        midia.criado = moment().format('YYYY-MM-DD HH:mm:ss');
+        midia.modificado = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        await Connect("midia").insert(midia);
+        
+        return res.redirect("/midias");
+    }
+
+    async delete(req,res){
+        let id_midia = req.body.id;
+        await Connect("midia").delete().where({id_midia});        
+        return res.redirect("/midias");
+    }
+
+    async editar(req,res){
+        let id_midia = req.params.id;
+        let midia = await Connect("midia").select().where({id_midia});
+        return res.render("midia/editarmidia", {midia: midia[0]});
+    }
+
+    async update(req,res){
+        let midia = {
+           nome: req.body.nome,
+           telefone: req.body.telefone,
+           descricao:req.body.descricao
+        }
+        midia.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
+        await Connect("midia").update(midia).where({id_midia: req.body.id_midia});
+        return res.redirect("/midias");
+    }    
+
+
+}
+
+module.exports = new MidiaController();

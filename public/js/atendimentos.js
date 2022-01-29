@@ -7,6 +7,7 @@
     }
 
     function getMidias(){
+        console.log("getMidias")
         axios.get(`http://localhost:${port}/midia`).then( response => {
             var midias = response.data.result;
 
@@ -22,7 +23,7 @@
 
     }
 
-    //getMidias()
+    // getMidias()
 
     function buscarLigacoes(){
 
@@ -39,8 +40,9 @@
         tbody.setAttribute('id',"lista");
         tabela.appendChild(tbody);
 
-        axios.get(`http://localhost:${port}/ligacao-receptiva/${telefone}?dtInicial=${dtInit}&dtFinal=${dtFim}&hrInicial=${hrInit}&hrFinal=${hrFim}`).then( response => {
-            var calls = response.data.result;
+        axios.get(`http://localhost:${port}/ligacao-receptiva/${telefone}?dtInicial=${dtInit}&dtFinal=${dtFim}&hrInicial=${hrInit}&hrFinal=${hrFim}`).then( retorno => {
+            var calls = retorno.data.result;
+            console.log(retorno.data)
             calls.forEach(call => {
 
                 var item = document.createElement("tr");

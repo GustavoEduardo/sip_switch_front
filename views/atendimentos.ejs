@@ -1,7 +1,7 @@
 
 <%- include ("partials/head.ejs"); %>
 
-<body style="background-color: rgb(230, 230, 230);">
+<body style="background-color: rgba(230, 230, 230, 0.555);">
 	<%- include ("partials/header.ejs"); %>
 
 	<div class="principal">
@@ -10,41 +10,40 @@
 		<form>
 			<div class="form-row">
 			  <div class="col">
-				<h1>Atendimentos</h1>
+				<h1>&nbsp Ligações recebidas</h1>
 			  </div>
 			  <div class="col-4">
 				<h3>Resultado da Busca</h3>
-				<span>Encontradas: </span><span id="total"></span><br>
-				<span>Anonimo: </span><span id="anonimo"></span><br>
-				<span>Telefone: </span><span id="telefone"></span>
-				<h6>Periodo</h6>
-				<span>De: </span><span id="de"></span>&nbsp <span id="hrDe"></span><br>
-				<span>Até: </span><span id="ate"></span>&nbsp <span id="hrAte"></span>
-			  </div>
+				<span>Encontradas: </span><span> <%=result.length%></span><br>
+				<span>Anonimo: </span><span></span><br>
+				<span>Telefone: </span><span id="telefone"><%=filtro.telefone%></span>
+			</div>
 			</div>
 		  </form>
 
 		<br>
 		<hr>
-		<div class="botoes">
-			<a class="btn btn-outline-success mb-2 ml-auto" target="_blank" href=""><i class="fas fa-file-excel"></i> Exportar</a>
+		<div class="">
+			<a class="btn btn-outline-success mb-2" target="_blank" href=""><i class="fas fa-file-excel"></i> Exportar</a>
 		</div>
 		<nav class="navbar navbar-dark bg-secondary ">
-			<div class="form-inline ml-auto">
-				<!-- <select class="form-control mr-2" id="tel">
-					<option>Selecione o número</option>
-					
-				</select> -->
-				<input class="form-control mr-2" type="number" value="080087839555" disabled id="tel">
-				<b class="nav-item nav-link">Período: &nbsp&nbsp </b>
-				<input class="form-control mr-2" type="date"  id="dtInit">
-				<input class="form-control mr-2" type="date" placeholder="Input padrão" id="dtFim">
-				<b class="nav-item nav-link">Horário: &nbsp&nbsp </b>
-				<input class="form-control mr-2" type="time"  id="hrInit">
-				<input class="form-control mr-3" type="time" id="hrFim">
+			<form class="form-inline ml-auto" method="post" action="atendimentos-listar">
+				<b class="nav-item nav-link">Mídia: </b>
+				<select class="form-control mr-2 mb-1" id="tel" name="telefone" required>
+					<option value="">---</option>
+					<%midias.forEach(m=>{%>
+						<option value="<%=m.telefone%>"><%=m.nome%></option>
+					<%})%>								
+				</select>
+				<b class="nav-item nav-link">Período: </b>
+				<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtInit%>" id="dtInit"  name="dtInit" required>
+				<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtFim%>"  id="dtFim" name="dtFim" required>
+				<b class="nav-item nav-link">Horário: </b>
+				<input class="form-control mr-2 mb-1" type="time" value="<%=filtro.hrInit%>"  id="hrInit"  name="hrInit" required>
+				<input class="form-control mr-3 mb-1" type="time" value="<%=filtro.hrFim%>" id="hrFim" name="hrFim" required>
 	
-			  <button class="btn btn-success my-2 my-sm-1"  onclick="buscarLigacoes()">Pesquisar</button>
-			</div>
+			  <button class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Pesquisar</button>
+			</form>
 		  </nav>
 		<br>
 
@@ -58,7 +57,14 @@
 			  </tr>
 			</thead>
 			<tbody id="lista">
-			 
+			 <%result.forEach(r=>{%>
+				<tr>
+					<td><%=r.src%></td>
+					<td><%=r.data%></td>
+					<td><%=r.hora%></td>
+					<td><%=r.duration%></td>
+				</tr>
+			<%})%>
 			
 			</tbody>
 		  </table>
@@ -67,6 +73,6 @@
 	</div>
 
 	<%- include ("partials/footer.ejs"); %>
-	<script type="text/javascript" src="/js/atendimentos.js"></script>
+	
 </body>
 </html>
