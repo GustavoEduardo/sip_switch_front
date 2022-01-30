@@ -1,12 +1,13 @@
-Tela de login
-sistema de login
-
-middleware de autenticação
-
-tela relatorio de qualidade
-back relatorio de qualidade
+salvar token no front
+logout
 
 tela recuperar senha
 sistema recuperar senha
 
-Sair
+Relatórios...
+    Paginação
+    Ordenação
+    link pdf
+    link csv
+
+Mensagens de erro

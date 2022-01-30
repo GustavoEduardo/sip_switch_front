@@ -9,5 +9,8 @@ usuarioRoutes.route('/usuario-deletar').post(Controller.delete);
 usuarioRoutes.route('/usuario-editar/:id').get(Controller.editar);
 usuarioRoutes.route('/alterarusuario').post(Controller.update);
 
+usuarioRoutes.route('/login').get(Controller.login);
+usuarioRoutes.route('/login').post(Controller.logar);
+
 
 module.exports = usuarioRoutes;

@@ -1,0 +1,92 @@
+
+<%- include ("../partials/head.ejs"); %>
+
+<body style="background-color: rgba(230, 230, 230, 0.555);">
+	<%- include ("../partials/header.ejs"); %>
+
+	<div class="principal">
+	<div class="painel">
+		<br>
+		<form>
+			<div class="form-row">
+			  <div class="col">
+				<h1>&nbsp Relatório de Produtovidade por Ramal</h1>
+			  </div>
+			  <div class="col-4">
+				<h3>Resultado da Busca</h3>
+				<span>Encontradas: </span><span><%=totais.ligEfetuadas%></span><br>
+				<span>Antendidas: </span><span><%=totais.atendidas%></span><br>
+				<span>NA: </span><span><%=totais.na%></span><br>
+				<span>Ocupadas: </span><span><%=totais.ocupadas%></span><br>
+				<span>Falhas: </span><span><%=totais.falhas%></span><br>
+
+			</div>
+			</div>
+		  </form>
+
+		<br>
+		<hr>
+		<div class="">
+			<a class="btn btn-outline-success mb-2 mr-1" target="_blank" href=""><i class="fas fa-file-excel"></i> CSV</a>
+			<a class="btn btn-outline-danger mb-2 mr-1" target="_blank" href=""><i class="fas fa-file-pdf"></i> PDF</a>
+		</div>
+		<nav class="navbar navbar-dark bg-secondary ">
+			<form class="form-inline ml-auto" method="post" action="relatorios-vendedores">
+				<b class="nav-item nav-link">Tempo mínimo: </b>
+				<select class="form-control mr-2 mb-1" id="temp" name="tempMin" required>
+					<option value="0">Todas</option>
+					<option value="10">10s</option>
+					<option value="20">20s</option>	
+					<option value="30">30s</option>	
+					<option value="60">60s</option>
+					<option value="90">90s</option>
+				</select>					
+				<b class="nav-item nav-link">Período: </b>
+				<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtInit%>" id="dtInit"  name="dtInit" required>
+				<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtFim%>"  id="dtFim" name="dtFim" required>
+				<b class="nav-item nav-link">Horário: </b>
+				<input class="form-control mr-2 mb-1" type="time" value="<%=filtro.hrInit%>"  id="hrInit"  name="hrInit" required>
+				<input class="form-control mr-3 mb-1" type="time" value="<%=filtro.hrFim%>" id="hrFim" name="hrFim" required>
+	
+			  <button class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
+			</form>
+		  </nav>
+		<br>
+
+		<table class="table table-striped" id="tabela">
+			<thead>
+			  <tr>
+				<th scope="col">Ramal</th>
+				<th scope="col">Tempo Falado</th>
+				<th scope="col">TMA Total</th>
+				<th scope="col">Efetuadas</th>
+				<th scope="col">Atendidas</th>
+				<th scope="col">N.A.</th>
+				<th scope="col">Ocupadas</th>
+				<th scope="col">Falhas</th>
+			  </tr>
+			</thead>
+			<tbody id="lista">		
+				<%vendedores.forEach(v=>{%>
+					<tr>
+						<td><%=v.ramal%></td>
+						<td><%=v.tempoTot%></td>
+						<td><%=v.tmaTot%></td>
+						<td><%=v.ligEfetuadas%></td>
+						<td><%=v.atendidas%></td>
+						<td><%=v.na%></td>
+						<td><%=v.ocupadas%></td>
+						<td><%=v.falhas%></td>
+					</tr>
+				<%})%>
+			
+			</tbody>
+		  </table>
+
+	</div>
+	</div>
+
+	<%- include ("../partials/footer.ejs"); %>
+	
+</body>
+</html>

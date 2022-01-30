@@ -1,6 +1,8 @@
 const Connect  = require('../database/Connect');
 const moment = require('moment');
 const bcryptjs = require('bcryptjs');
+require('dotenv').config();
+var jwt = require('jsonwebtoken');
 
 
 class UsuarioController{
@@ -15,7 +17,7 @@ class UsuarioController{
     } 
 
     async create(req,res){
-        let salt = bcryptjs.genSaltSync(11);
+        let salt = bcryptjs.genSaltSync(process.env.SALT);
         let usuario = {
             ...req.body
         }
@@ -48,7 +50,40 @@ class UsuarioController{
         usuario.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
         await Connect("usuario").update(usuario).where({id_usuario: req.body.id_usuario});
         return res.redirect("/usuarios");
-    }       
+    }
+
+    async login(req, res){
+        return res.render("usuario/login", {dados:[]});
+    }
+    
+    async logar(req,res){
+        let data = req.body;
+        try{
+            let usuario = await Connect.select("id_usuario","nome","email","senha").table("usuario").where({email: data.login});
+            if(!usuario[0]){
+                throw "Email Inválido"
+            }
+            let correct = bcryptjs.compareSync(data.senha, usuario[0].senha);
+            if(!correct){            
+                //render erro
+                console.log("Erro")
+            }else{
+                if(usuario){
+                    var dados = {id: usuario[0].id, nome: usuario[0].nome, email: usuario[0].email}//tirar senha
+                    dados.token =  await jwt.sign({id: dados.id}, process.env.SECRET, {
+                        expiresIn: 28800 // expires in 8hrs
+                    });
+        
+                    return res.redirect("/home");
+                }else{
+                    //erro
+                    console.log("Erro 2")
+                }        }       
+
+        }catch (e) {
+            return res.status(400).json(e);
+        }  
+    }
 
 }
 

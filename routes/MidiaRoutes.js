@@ -1,5 +1,6 @@
 const Router = require('express').Router;
 const Controller = require('../controllers/MidiaController');
+const auth = require("../middlewares/auth");
 
 const MidiaRoutes = Router();
 MidiaRoutes.route('/midias').get(Controller.listar);

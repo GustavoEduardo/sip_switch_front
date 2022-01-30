@@ -1,0 +1,119 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+	body {
+    font-family: "Lato", sans-serif;
+}
+
+.main-head{
+    height: 150px;
+    background: #FFF;
+   
+}
+
+.sidenav {
+    height: 100%;
+	opacity: 0.8;
+    background-color: #2d204e;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.main {
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+}
+
+@media screen and (max-width: 450px) {
+    .login-form{
+        margin-top: 10%;
+    }
+
+    .register-form{
+        margin-top: 10%;
+    }
+}
+
+@media screen and (min-width: 768px){	
+    .main{
+        margin-right: 30%;
+		margin-left: 15%;
+		padding-top: 15%;
+    }
+
+    .sidenav{
+        width: 40%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+    }
+
+    .login-form{
+        margin-top: 10%;
+    }
+
+    .register-form{
+        margin-top: 20%;
+    }
+}
+
+
+.login-main-text{
+    margin-top: 20%;
+    padding: 60px;
+    color: #fff;
+}
+
+.login-main-text h2{
+    font-weight: 300;
+}
+
+</style>
+
+<body style="background-color: rgb(230, 230, 230);">
+		
+	<div class="sidenav">
+		<div class="login-main-text">
+			<hr>
+		   <h1>Sip Switch</h1>
+		   <h5>Solução de telefonia e qualidade para Call Centers</h5>
+		   <hr>
+		   <h6>Entre com email e senha para ter acesso ao sistema.</h6>
+		</div>
+	 </div>
+	 <div class="main">
+		<div class="col-md-6 col-sm-12">
+		   <div class="login-form">
+			  <form method="POST" action="login">
+				 <div class="form-group">
+					<label>Email</label>
+					<input type="email" name="login" class="form-control" placeholder="email">
+				 </div>
+				 <div class="form-group">
+					<label>Senha</label>
+					<input type="password" name="senha" class="form-control" placeholder="senha">
+				 </div>
+				 <div class="row">
+					 <div class="col">
+						<a href="" class="link">Esqueci a senha</a>
+					 </div>
+					 <div class="col">
+						<button type="submit" class="btn btn-info" style="width: 100%;">Entrar</button>
+					</div>
+				 </div>
+			  </form>
+		   </div>
+		</div>
+	 </div>
+	
+
+	<%- include ("../partials/footer.ejs"); %>
+	
+</body>
+</html>

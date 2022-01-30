@@ -11,8 +11,12 @@ app.set('view engine', 'ejs');
 
 
 //pagina Home
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
 	res.render("home");	
+});
+//Página de login
+app.get('/', (req, res) => {
+	res.render("usuario/login");	
 });
 
 //Iniciando o servidor
