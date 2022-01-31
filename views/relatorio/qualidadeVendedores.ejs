@@ -1,5 +1,6 @@
 
 <%- include ("../partials/head.ejs"); %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body style="background-color: rgba(230, 230, 230, 0.555);">
 	<%- include ("../partials/header.ejs"); %>
@@ -82,11 +83,59 @@
 			
 			</tbody>
 		  </table>
-
+		  <div class="statusLigacoes">
+			<canvas id="statusLigacoes"></canvas>
+		  </div>
+		  
 	</div>
+	
+	<div>
+		
+	  </div>
 	</div>
 
 	<%- include ("../partials/footer.ejs"); %>
+	
+	<script>			
+		const labels = [
+			'Encontradas',
+			'Atendidas',
+			'Não Atendidas',
+			'April',
+			'Ocupadas',
+			'Falhas',
+		];
+
+		const data = {
+			labels: labels,
+			datasets: [{
+			label: 'My First dataset',
+			backgroundColor: ["#a45522","#548755","#125547","#236698","#548754","#d58a69"],
+			borderColor: 'rgb(255, 99, 132)',
+			data: [0, 10, 5, 2, 20, 30],
+			}]
+		};
+
+		const config = {
+				type: 'pie',
+				data: data,
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							display: false,
+						},
+					},
+				}
+			};
+	</script>
+	<script>
+		const myChart = new Chart(
+		  document.getElementById('statusLigacoes'),
+		  config
+		);
+	</script>
+	   
 	
 </body>
 </html>
