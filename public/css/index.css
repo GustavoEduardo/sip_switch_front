@@ -2,7 +2,6 @@
     opacity: 0.8;
     box-shadow: 0px 0px 5px 3px rgb(0, 0, 0);
     background-color: #2d204e;
-    font-size: 1.1em;
 }
 
 .centro{
@@ -14,8 +13,7 @@
 }
 
 .link:hover{
-    background-color: #5644866b;
-    line-height: 110%;
+    background-color: #d4cfe015;
     border-radius: 1px;
 }
 

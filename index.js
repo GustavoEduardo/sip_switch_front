@@ -20,10 +20,10 @@ app.get('/', (req, res) => {
 });
 
 //Iniciando o servidor
-app.listen(3000,(err) =>{
+app.listen(4000,(err) =>{
 	if(err){
 		console.log(err)
 	}else{
-		console.log("Sip rodando na porta 3000.")
+		console.log("Sip rodando na porta 4000.")
 	}
 });

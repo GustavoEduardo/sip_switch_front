@@ -1,6 +1,8 @@
 salvar token no front
 logout
 
+middleware para administrador
+
 tela recuperar senha
 sistema recuperar senha
 

@@ -1,1 +1,1 @@
-Front para consumir api sip switch
+Sistema com o principal objetivo de gerar relatórios e obter ligações do SIP de telefonia
