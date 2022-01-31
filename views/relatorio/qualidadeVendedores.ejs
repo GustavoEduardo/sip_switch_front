@@ -8,22 +8,24 @@
 	<div class="principal">
 	<div class="painel">
 		<br>
-		<form>
+		<div>
 			<div class="form-row">
-			  <div class="col">
-				<h1>&nbsp Relatório de Produtovidade por Ramal</h1>
+			  <div class="col-6">
+				<h1>&nbsp Relatório de Produtovidade</h1>
 			  </div>
-			  <div class="col-4">
+			  <div class="col-3">
 				<h3>Resultado da Busca</h3>
 				<span>Encontradas: </span><span><%=totais.ligEfetuadas%></span><br>
 				<span>Antendidas: </span><span><%=totais.atendidas%></span><br>
 				<span>NA: </span><span><%=totais.na%></span><br>
 				<span>Ocupadas: </span><span><%=totais.ocupadas%></span><br>
 				<span>Falhas: </span><span><%=totais.falhas%></span><br>
-
+				</div>
+				<div class="statusLigacoes col-3">
+					<canvas id="statusLigacoes"></canvas>
+				</div>
 			</div>
-			</div>
-		  </form>
+		</div>
 
 		<br>
 		<hr>
@@ -83,9 +85,6 @@
 			
 			</tbody>
 		  </table>
-		  <div class="statusLigacoes">
-			<canvas id="statusLigacoes"></canvas>
-		  </div>
 		  
 	</div>
 	
