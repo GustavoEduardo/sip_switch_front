@@ -21,9 +21,10 @@
 				<span>Ocupadas: </span><span><%=totais.ocupadas%></span><br>
 				<span>Falhas: </span><span><%=totais.falhas%></span><br>
 				</div>
-				<div class="statusLigacoes col-3">
+				<div class="statusLigacoes col-2">
 					<canvas id="statusLigacoes"></canvas>
 				</div>
+				<div class="statusLigacoes col-1"></div>
 			</div>
 		</div>
 
@@ -97,10 +98,8 @@
 	
 	<script>			
 		const labels = [
-			'Encontradas',
 			'Atendidas',
 			'Não Atendidas',
-			'April',
 			'Ocupadas',
 			'Falhas',
 		];
@@ -108,10 +107,10 @@
 		const data = {
 			labels: labels,
 			datasets: [{
-			label: 'My First dataset',
-			backgroundColor: ["#a45522","#548755","#125547","#236698","#548754","#d58a69"],
-			borderColor: 'rgb(255, 99, 132)',
-			data: [0, 10, 5, 2, 20, 30],
+			label: 'Status das Ligações',
+			backgroundColor: ["#2E8B57","#4682B4","#D2691E","#B22222"],
+			borderColor: '	#6A5ACD',
+			data: [30, 11, 20, 2],
 			}]
 		};
 
