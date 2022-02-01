@@ -16,10 +16,10 @@
 			  <div class="col-3">
 				<h3>Resultado da Busca</h3>
 				<span>Encontradas: </span><span><%=totais.ligEfetuadas%></span><br>
-				<span>Antendidas: </span><span><%=totais.atendidas%></span><br>
-				<span>NA: </span><span><%=totais.na%></span><br>
-				<span>Ocupadas: </span><span><%=totais.ocupadas%></span><br>
-				<span>Falhas: </span><span><%=totais.falhas%></span><br>
+				<span>Antendidas: </span><span id="atendidas"><%=totais.atendidas%></span><br>
+				<span>NA: </span><span id="na"><%=totais.na%></span><br>
+				<span>Ocupadas: </span><span id="ocupadas"><%=totais.ocupadas%></span><br>
+				<span>Falhas: </span><span id="falhas"><%=totais.falhas%></span><br>
 				</div>
 				<div class="statusLigacoes col-2">
 					<canvas id="statusLigacoes"></canvas>
@@ -95,8 +95,14 @@
 	</div>
 
 	<%- include ("../partials/footer.ejs"); %>
+
 	
-	<script>			
+	<script>
+	var atendidas = document.getElementById('atendidas').innerHTML;
+	var na = document.getElementById("na").innerHTML;
+	var ocupadas = document.getElementById("ocupadas").innerHTML;
+	var falhas = document.getElementById("falhas").innerHTML;
+		
 		const labels = [
 			'Atendidas',
 			'Não Atendidas',
@@ -110,7 +116,7 @@
 			label: 'Status das Ligações',
 			backgroundColor: ["#2E8B57","#4169E1","#D2691E","#B22222"],
 			borderColor: '#B0C4DE',
-			data: [30, 11, 20, 2],
+			data: [atendidas,na,ocupadas,falhas],
 			}]
 		};
 

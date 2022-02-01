@@ -11,5 +11,8 @@ Relatórios...
     Ordenação
     link pdf
     link csv
+    filtrar por ramal
+    horário padrão
 
 Mensagens de erro
+
