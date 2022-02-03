@@ -20,3 +20,9 @@
 .statusLigacoes{
     width: 20%;
 }
+
+.grafico-status{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
