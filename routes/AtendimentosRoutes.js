@@ -1,9 +1,10 @@
 const Router = require('express').Router;
 const Controller = require('../controllers/AtendimentoController');
+const auth = require("../middlewares/auth");
 
 const AtendimentoRoutes = Router();
-AtendimentoRoutes.route('/atendimentos').get(Controller.exibir);
-AtendimentoRoutes.route('/atendimentos-listar').post(Controller.listar);
+AtendimentoRoutes.route('/atendimentos').all(auth).get(Controller.exibir);
+AtendimentoRoutes.route('/atendimentos-listar').all(auth).post(Controller.listar);
 
 
 module.exports = AtendimentoRoutes;

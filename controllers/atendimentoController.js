@@ -4,8 +4,12 @@ const fs = require('fs');
 class AtendimentoController{
 
     async exibir(req,res){
+        var filtro = {
+            hrInit:"00:00:00",
+            hrFim:"23:59:00"            
+        }
         let midias = await Connect("midia").select();
-        return res.render("atendimentos", {result:[], midias, filtro:[]}); 
+        return res.render("atendimentos", {result:[], midias, filtro, erro:[], anonymous:""}); 
 
     }    
 
@@ -13,16 +17,27 @@ class AtendimentoController{
         let filtro = {
                ...req.body
             }
-
-        let midias = await Connect("midia").select();
-
-        let numeros = await Connect("cdr").select().where({userfield:filtro.telefone}).andWhere("calldate",">=",filtro.dtInit)
+        try {
+            var midias = await Connect("midia").select();
+            var numeros = await Connect("cdr").select().where({userfield:filtro.telefone}).andWhere("calldate",">=",filtro.dtInit)
+            
+        } catch (e) {
+            let erro = {
+                menssagem: "Erro ao buscar no banco de dados. Reccarrege a página e tente novamente.",
+                erro: e,
+                codigo: 400
+            }
+            return res.render("atendimentos", {result:[], midias, filtro:[], erro, anonymous:"", midias: []}); 
+        }       
         
         let result = numeros;
 
-        //filtra data final
-        let numeros2 = []
+
+        //filtra data final e conta anonymous
+        var anonymous = 0;
+        let numeros2 = [];
         numeros.map(n=>{
+            if(n.src =="anonymous") anonymous++;
             var data;
             if(n.calldate.getMonth()+1 < 10){                        
                 if(n.calldate.getDate() < 10){
@@ -82,9 +97,9 @@ class AtendimentoController{
             
     
         }
-        criarCsv(result)
 
-        res.render("atendimentos", {result, filtro, midias, filtro});        
+        criarCsv(result)
+        res.render("atendimentos", {result, filtro, midias, erro:[], anonymous});        
 
     }  
 

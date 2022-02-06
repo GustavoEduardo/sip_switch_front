@@ -4,27 +4,45 @@ const pdf = require('html-pdf');
 const ejs = require('ejs');
 
 class RelatorioController{
-
+   
     async exibirQualidadeVend(req,res){
-        return res.render("relatorio/qualidadeVendedores", {filtro:[], vendedores:[], totais:[]}); 
+        var filtro = {
+            hrInit:"00:00:00",
+            hrFim:"23:59:00",
+            tempMin:"00",
+            ordem: "dst",
+            tipoOrdem: "DESC"
+        }
+
+        return res.render("relatorio/qualidadeVendedores", {filtro, vendedores:[], totais:[], erro:[]}); 
 
     }    
 
     async listarQualidadeVend(req,res){
         let filtro ={
             ...req.body
-        }       
-
-        //filtrando ligações efetuadas (só ativas!!!)
-        let query = Connect.select().table("cdr").where("calldate",">=",filtro.dtInit)
-        .andWhere("dcontext", "!=", "Supervisores").andWhere("dcontext", "!=", "Ramais-JM")
-        .whereRaw("dstchannel NOT LIKE '%@Discador%'").andWhereBetween("dst", [1000,9999])
-        if(filtro.tempMin){
-            query.andWhere("duration", ">=", filtro.tempMin)
         }
+        
+        try {
+             //filtrando ligações efetuadas (só ativas!!!)
+            let query = Connect.select().table("cdr").where("calldate",">=",filtro.dtInit)
+            .andWhere("dcontext", "!=", "Supervisores").andWhere("dcontext", "!=", "Ramais-JM")
+            .whereRaw("dstchannel NOT LIKE '%@Discador%'").andWhereBetween("dst", [1000,9999])
+            if(filtro.tempMin){
+                query.andWhere("duration", ">=", filtro.tempMin)
+            }
+            if(filtro.ramal){
+                query.andWhere("dst", "=", filtro.ramal)
+            }
+            var retorno = await query.orderBy(filtro.ordem,filtro.tipoOrdem);
+            var result= retorno;
+            
+        } catch (e) {
 
-        let retorno = await query;
-        let result= retorno;
+            console.log("oioioi")
+            
+            return res.render("relatorio/qualidadeVendedores", {filtro, vendedores:[], totais:[], erro});
+        }
 
         //filtrar data final
         let retorno2 = [];
@@ -108,9 +126,9 @@ class RelatorioController{
         }
 
         //ordena array vendedores pelo ramal
-        vendedores.sort(function(a,b) {
-            return a.ramal < b.ramal ? -1 : a.ramal > b.ramal ? 1 : 0;
-        });
+        // vendedores.sort(function(a,b) {
+        //     return a.ramal < b.ramal ? -1 : a.ramal > b.ramal ? 1 : 0;
+        // });
         
         //atualiza valores
         result.map(r=>{
@@ -217,8 +235,8 @@ class RelatorioController{
                 })
             }            
         })
-
-        return res.render("relatorio/qualidadeVendedores", {filtro, vendedores, totais});
+       
+        return res.render("relatorio/qualidadeVendedores", {filtro, vendedores, totais, erro:{}});
 
     }  
 

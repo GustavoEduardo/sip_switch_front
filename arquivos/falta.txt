@@ -6,13 +6,15 @@ middleware para administrador
 tela recuperar senha
 sistema recuperar senha
 
+Mensagens de erros
+    midias
+    usuario
+
+
 Relatórios...
     Paginação
-    Ordenação
+    Ordenação array
     link pdf
     link csv
-    filtrar por ramal
-    horário padrão
 
-Mensagens de erro
 

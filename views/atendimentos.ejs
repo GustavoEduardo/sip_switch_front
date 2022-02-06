@@ -15,13 +15,14 @@
 			  <div class="col-4">
 				<h3>Resultado da Busca</h3>
 				<span>Encontradas: </span><span> <%=result.length%></span><br>
-				<span>Anonimo: </span><span></span><br>
+				<span>Anonimo: </span><span><%=anonymous%></span><br>
 				<span>Telefone: </span><span id="telefone"><%=filtro.telefone%></span>
 			</div>
 			</div>
 		  </form>
 
 		<br>
+		<span class="erro"><%=erro.menssagem%></span>
 		<hr>
 		<div class="">
 			<a class="btn btn-outline-success mb-2" target="_blank" href=""><i class="fas fa-file-excel"></i> CSV</a>
@@ -53,7 +54,6 @@
 				<th scope="col">Telefone</th>
 				<th scope="col">Data</th>
 				<th scope="col">Hora</th>
-				<th scope="col">Duração</th>
 			  </tr>
 			</thead>
 			<tbody id="lista">
@@ -62,7 +62,6 @@
 					<td><%=r.src%></td>
 					<td><%=r.data%></td>
 					<td><%=r.hora%></td>
-					<td><%=r.duration%></td>
 				</tr>
 			<%})%>
 			

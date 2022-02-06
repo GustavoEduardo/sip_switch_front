@@ -53,7 +53,7 @@ class UsuarioController{
     }
 
     async login(req, res){
-        return res.render("usuario/login", {dados:[]});
+        return res.render("usuario/login", {dados:[], erro:{}});
     }
     
     async logar(req,res){
@@ -61,28 +61,44 @@ class UsuarioController{
         try{
             let usuario = await Connect.select("id_usuario","nome","email","senha").table("usuario").where({email: data.login});
             if(!usuario[0]){
-                throw "Email Inválido"
+                throw "Email não encontrado"
             }
             let correct = bcryptjs.compareSync(data.senha, usuario[0].senha);
-            if(!correct){            
-                //render erro
-                console.log("Erro")
+            if(!correct){        
+                throw "Senha Inválida"
             }else{
                 if(usuario){
                     var dados = {id: usuario[0].id, nome: usuario[0].nome, email: usuario[0].email}//tirar senha
                     dados.token =  await jwt.sign({id: dados.id}, process.env.SECRET, {
                         expiresIn: 28800 // expires in 8hrs
                     });
-        
+
+                    //como salvar e ler no auth???
+                    // req.headers.authorization = "Bearer "+dados.token;
+                    // console.log(req.headers.authorization)             
+
                     return res.redirect("/home");
                 }else{
-                    //erro
-                    console.log("Erro 2")
-                }        }       
+                    throw "Usuario não encontrado"
+                }
+            }       
 
-        }catch (e) {
-            return res.status(400).json(e);
-        }  
+        } catch (e) {
+            console.log(e)
+            let erro = {
+                menssagem: e,
+                erro: e,
+                codigo: 400
+            }
+            return res.render("usuario/login", {dados:[], erro});
+        }    
+    }
+
+    async logout(req, res){
+         req.headers.authorization= "";
+
+        return res.redirect("/login");
+
     }
 
 }
