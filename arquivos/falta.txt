@@ -1,7 +1,6 @@
-salvar token no front
-logout
+bug do token
 
-middleware para administrador
+terminar middleware para administrador
 
 tela recuperar senha
 sistema recuperar senha

@@ -1,7 +1,11 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark  barra">
-  <a class="navbar-brand display-4 ml-1" title="Home" href="/home">SIP Switch</a>
+  <form method="post" action="home">
+    <input name="token" type="hidden" class="token">
+    <button class="navbar-brand display-4 ml-1 btn btn-link" title="Home">SIP Switch</button>
+  </form>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    
     <span class="navbar-toggler-icon"></span>
     <span class="icon-bar top-bar"></span>
     <span class="icon-bar middle-bar"></span>
@@ -9,11 +13,37 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link active mr-1 link" href="/atendimentos"><i class="fas fa-home "></i> Ligações Recebidas</a>
-      <a class="nav-item nav-link active mr-1 link" href="/relatorios-vendedores"><i class="fas fa-chart-line"></i> Qualidade do Vendedor</a>
-      <a class="nav-item nav-link active mr-1 link" href="/midias"><li class="fas fa-file-signature "></li> Mídias</a>
-      <a class="nav-item nav-link active mr-1 link" href="/usuarios"><i class="fas fa-users"></i> Usuários</a>
+      <form method="post" action="atendimentos">
+        <input name="token" type="hidden" class="token">
+        <button type="submit" class="nav-item nav-link btn btn-link active mr-1 "><i class="fas fa-home "></i> Ligações Recebidas</button>
+      </form>
+      <form method="post" action="relatorios-vendedores">
+        <input name="token" type="hidden" class="token">
+        <button class="nav-item nav-link btn btn-link active mr-1 "><i class="fas fa-chart-line"></i> Qualidade do Vendedor</button>
+      </form>
+      <form method="post" action="midias">
+        <input name="token" type="hidden" class="token">
+        <button class="nav-item nav-link btn btn-link active mr-1 "><li class="fas fa-file-signature "></li> Mídias</button>
+      </form>
+      <form method="post" action="usuarios">
+        <input name="token" type="hidden" class="token">
+        <button type="submit" class="nav-item nav-link btn btn-link active mr-1 " ><i class="fas fa-users"></i> Usuários</button>
+      </form>
       <a class="nav-item nav-link active link" href="/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+
     </div>
   </div>
 </nav>
+<script>
+	 window.onload = function setToken(){
+		var token = document.getElementById("token").value;	
+		localStorage.setItem('token',token);
+	}			
+</script>
+
+<script>
+  var len = document.getElementsByClassName("token").length;
+  for (i = 0; i < len; i++){
+				document.getElementsByClassName("token")[i].value = localStorage.getItem('token');				
+			}
+</script>

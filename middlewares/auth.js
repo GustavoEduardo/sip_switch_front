@@ -9,28 +9,18 @@ let auth = (req,res,next,) => {
         code: 200,
         data: {}
     };
-    return next();
     try {
         //validar se existe authorization no header
-        const authHeader =  req.headers.authorization;
+        const token =  req.body.token;
     
-        if( !authHeader ) throw 'Acesso não autorizado (code 1)';
-
-        //validar se há 2 partes authorization
-        const parts = authHeader.split(' ');
-        if( !parts[1]) throw 'Acesso não autorizado (code 2)';        
-
-        //validar schema do authorization "Bearer"
-        const [scheme, token] = parts;
-        if( !/^Bearer$/i.test(scheme) ) throw 'token invalido'
-
-        if (!token) throw 'Token invalido';
+        if(!token) throw 'Acesso não autorizado (code 1)';
         
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if (err) throw 'Token Invalido.';
           if(decoded){                    
             //se tudo estiver ok, salva no request para uso posterior  
-            req.id = decoded.id_usuario;        
+            req.id = decoded.id_usuario;  
+            req.tipo = decoded.tipo;      
           }
         });
     }catch (e) {

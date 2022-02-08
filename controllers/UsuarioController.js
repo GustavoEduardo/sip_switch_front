@@ -59,7 +59,7 @@ class UsuarioController{
     async logar(req,res){
         let data = req.body;
         try{
-            let usuario = await Connect.select("id_usuario","nome","email","senha").table("usuario").where({email: data.login});
+            let usuario = await Connect.select("id_usuario","nome","email","senha","tipo").table("usuario").where({email: data.login});
             if(!usuario[0]){
                 throw "Email não encontrado"
             }
@@ -68,16 +68,12 @@ class UsuarioController{
                 throw "Senha Inválida"
             }else{
                 if(usuario){
-                    var dados = {id: usuario[0].id, nome: usuario[0].nome, email: usuario[0].email}//tirar senha
-                    dados.token =  await jwt.sign({id: dados.id}, process.env.SECRET, {
+                    var dados = {id: usuario[0].id_usuario, nome: usuario[0].nome, tipo: usuario[0].tipo}//tirar senha
+                    dados.token =  await jwt.sign(dados, process.env.SECRET, {
                         expiresIn: 28800 // expires in 8hrs
-                    });
+                    });     
 
-                    //como salvar e ler no auth???
-                    // req.headers.authorization = "Bearer "+dados.token;
-                    // console.log(req.headers.authorization)             
-
-                    return res.redirect("/home");
+                    return res.render("home",{token:  dados.token});
                 }else{
                     throw "Usuario não encontrado"
                 }

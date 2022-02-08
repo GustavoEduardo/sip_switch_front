@@ -2,18 +2,25 @@
 <%- include ("partials/head.ejs"); %>
 <link rel="stylesheet" type="text/css" href="/css/home.css">
 
-<body style="background-color: rgb(230, 230, 230);">
+<body onload="setToken()" style="background-color: rgb(230, 230, 230);">
 	<%- include ("partials/header.ejs"); %>
 	<div class="gradient" style="text-align: center;">
 		<div class="centro" style="margin-top: -3%;">
 			<div class="logo">
 				<h1 class="display-1">Sip Switch</h1>
 				<h6 class="display-4">Bem vindo</h6>
-			</div>			
+			</div>		
 		</div>		
 	</div>
+	<input id="token" type="text" value="<%=token%>">
 
-	<%- include ("partials/footer.ejs"); %>
+	<%- include ("partials/footer.ejs"); %>	
 	
 </body>
+<script>
+	function setToken(){
+		var token = document.getElementById("token").value;	
+		localStorage.setItem('token',token);
+	}			
+</script>
 </html>

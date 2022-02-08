@@ -11,8 +11,9 @@ app.use(routes);
 app.set('view engine', 'ejs');
 
 //pagina Home
-app.get('/home',auth, (req, res) => {
-	res.render("home");
+app.post('/home',auth, (req, res) => {
+	let token= req.body.token
+	res.render("home",{token});
 });
 //Página de login
 app.get('/', (req, res) => {

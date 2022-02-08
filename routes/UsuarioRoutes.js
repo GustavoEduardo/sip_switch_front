@@ -1,9 +1,10 @@
 const Router = require('express').Router;
 const Controller = require('../controllers/usuarioController');
 const auth = require("../middlewares/auth");
+const authAdmin = require("../middlewares/authAdmin");
 
 const usuarioRoutes = Router();
-usuarioRoutes.route('/usuarios').all(auth).get(Controller.listar);
+usuarioRoutes.route('/usuarios').all(auth).all(authAdmin).post(Controller.listar);
 usuarioRoutes.route('/usuario-cadastrar').all(auth).get(Controller.novo);
 usuarioRoutes.route('/usuario-cadastrar').all(auth).post(Controller.create);
 usuarioRoutes.route('/usuario-deletar').all(auth).post(Controller.delete);
