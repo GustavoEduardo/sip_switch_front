@@ -5,10 +5,10 @@ const authAdmin = require("../middlewares/authAdmin");
 
 const usuarioRoutes = Router();
 usuarioRoutes.route('/usuarios').all(auth).all(authAdmin).post(Controller.listar);
-usuarioRoutes.route('/usuario-cadastrar').all(auth).get(Controller.novo);
+usuarioRoutes.route('/usuario-cadastrar').get(Controller.novo);
 usuarioRoutes.route('/usuario-cadastrar').all(auth).post(Controller.create);
 usuarioRoutes.route('/usuario-deletar').all(auth).post(Controller.delete);
-usuarioRoutes.route('/usuario-editar/:id').all(auth).get(Controller.editar);
+usuarioRoutes.route('/usuario-editar/:id').get(Controller.editar);
 usuarioRoutes.route('/alterarusuario').all(auth).post(Controller.update);
 
 usuarioRoutes.route('/login').get(Controller.login);

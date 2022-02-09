@@ -1,14 +1,11 @@
 bug do token
 
-terminar middleware para administrador
-
 tela recuperar senha
 sistema recuperar senha
 
 Mensagens de erros
     midias
     usuario
-
 
 Relatórios...
     Paginação
@@ -17,5 +14,9 @@ Relatórios...
     link csv
 
 js bs4 interno
+
+listar todos os tipos em cadastro de usuário
+
+validações
 
 

@@ -38,8 +38,7 @@ class RelatorioController{
             var result= retorno;
             
         } catch (e) {
-
-            console.log("oioioi")
+            console.log(e)
             
             return res.render("relatorio/qualidadeVendedores", {filtro, vendedores:[], totais:[], erro});
         }

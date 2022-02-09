@@ -34,11 +34,12 @@
 			<span class="erro"><%=erro.menssagem%></span>
 			<hr>
 			<div class="">
-				<a class="btn btn-outline-success mb-2 mr-1" target="_blank" href=""><i class="fas fa-file-excel"></i> CSV</a>
-				<a class="btn btn-outline-danger mb-2 mr-1" target="_blank" href=""><i class="fas fa-file-pdf"></i> PDF</a>				
+				<a class="btn btn-outline-success mb-2 mr-1" target="_blank" href="https://google.com"><i class="fas fa-file-excel"></i> CSV</a>
+				<a class="btn btn-outline-danger mb-2 mr-1" target="_blank" href="https://google.com"><i class="fas fa-file-pdf"></i> PDF</a>				
 			</div>
 			<nav class="navbar navbar-dark bg-secondary ">
-				<form id="form-qualidade"  class="form-inline ml-auto" method="post" action="relatorios-vendedores">
+				<form id="form-qualidade"  class="form-inline ml-auto" method="post" action="relatorios-vendedores-lista">
+					<input name="token" type="hidden" class="token">
 					<input class="form-control mr-2 mb-1" name="ramal" type="number" min="0" max="9999" value="<%=filtro.ramal%>" placeholder="Ramal">
 					<b class="nav-item mr-1">Segundos: </b>
 					<input style="width:70px;" class="form-control mr-2 mb-1" name="tempMin" type="number" value="<%=filtro.tempMin%>" placeholder="Seg..">							

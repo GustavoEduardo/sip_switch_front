@@ -9,6 +9,7 @@
 			<h1>Cadastro de nova Mídia</h1>
 			<hr>
 			<form method="post" action="/alterarmidia">
+				<input name="token" type="hidden" class="token">
 				<div class="form-group">
 				<label for="exampleFormControlInput1">Nome</label>
 				<input type="text" class="form-control" id="exampleFormControlInput1" name="nome" value="<%-midia.nome%>" required>

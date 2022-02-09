@@ -16,24 +16,30 @@ class UsuarioController{
         return res.render("usuario/new");
     } 
 
-    async create(req,res){
-        let salt = bcryptjs.genSaltSync(process.env.SALT);
+    async create(req,res){      
+        let sal = parseInt(process.env.SALT)
+        let salt = bcryptjs.genSaltSync(sal);
         let usuario = {
-            ...req.body
+            nome: req.body.nome,
+            email: req.body.email,
+            senha: req.body.senha,
+            tipo: req.body.tipo
         }
         usuario.senha = bcryptjs.hashSync(usuario.senha, salt)
         usuario.criado = moment().format('YYYY-MM-DD HH:mm:ss');
         usuario.modificado = moment().format('YYYY-MM-DD HH:mm:ss');
-
         await Connect("usuario").insert(usuario);
         
-        return res.redirect("/usuarios");
+        let usuarios = await Connect("usuario").select("id_usuario","nome","email");
+        return res.render("usuario/index", {usuarios});
     }
 
     async delete(req,res){
         let id_usuario = req.body.id;
         await Connect("usuario").delete().where({id_usuario});        
-        return res.redirect("/usuarios");
+        
+        let usuarios = await Connect("usuario").select("id_usuario","nome","email");
+        return res.render("usuario/index", {usuarios});
     }
 
     async editar(req,res){
@@ -49,7 +55,9 @@ class UsuarioController{
         }
         usuario.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
         await Connect("usuario").update(usuario).where({id_usuario: req.body.id_usuario});
-        return res.redirect("/usuarios");
+        
+        let usuarios = await Connect("usuario").select("id_usuario","nome","email");
+        return res.render("usuario/index", {usuarios});
     }
 
     async login(req, res){
@@ -68,12 +76,12 @@ class UsuarioController{
                 throw "Senha Inválida"
             }else{
                 if(usuario){
-                    var dados = {id: usuario[0].id_usuario, nome: usuario[0].nome, tipo: usuario[0].tipo}//tirar senha
+                    var dados = {id_usuario: usuario[0].id_usuario, nome: usuario[0].nome, tipo: usuario[0].tipo}
                     dados.token =  await jwt.sign(dados, process.env.SECRET, {
                         expiresIn: 28800 // expires in 8hrs
                     });     
 
-                    return res.render("home",{token:  dados.token});
+                    return res.render("home",{token:  dados.token, tipo: dados.tipo});
                 }else{
                     throw "Usuario não encontrado"
                 }

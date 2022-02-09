@@ -15,20 +15,25 @@ class MidiaController{
 
     async create(req,res){
         let midia = {
-            ...req.body
+            nome : req.body.nome,
+            telefone: req.body.telefone,
+            descricao: req.body.descricao
         }
         midia.criado = moment().format('YYYY-MM-DD HH:mm:ss');
         midia.modificado = moment().format('YYYY-MM-DD HH:mm:ss');
 
         await Connect("midia").insert(midia);
         
-        return res.redirect("/midias");
+        let midias = await Connect("midia").select();
+        return res.render("midia/midias", {midias});
     }
 
     async delete(req,res){
         let id_midia = req.body.id;
         await Connect("midia").delete().where({id_midia});        
-        return res.redirect("/midias");
+        
+        let midias = await Connect("midia").select();
+        return res.render("midia/midias", {midias});
     }
 
     async editar(req,res){
@@ -45,7 +50,9 @@ class MidiaController{
         }
         midia.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
         await Connect("midia").update(midia).where({id_midia: req.body.id_midia});
-        return res.redirect("/midias");
+        
+        let midias = await Connect("midia").select();
+        return res.render("midia/midias", {midias});
     }    
 
 
