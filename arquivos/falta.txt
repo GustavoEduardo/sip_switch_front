@@ -16,4 +16,6 @@ Relatórios...
     link pdf
     link csv
 
+js bs4 interno
+
 
