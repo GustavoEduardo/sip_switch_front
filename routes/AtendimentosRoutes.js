@@ -1,6 +1,6 @@
 const Router = require('express').Router;
-const Controller = require('../controllers/AtendimentoController');
-const auth = require("../middlewares/auth");
+const Controller = require('..//controllers/AtendimentoController');
+const auth = require("..//middlewares/auth");
 
 const AtendimentoRoutes = Router();
 AtendimentoRoutes.route('/atendimentos').all(auth).post(Controller.exibir);

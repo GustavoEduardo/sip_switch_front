@@ -2,12 +2,10 @@ link dos arquivos
 
 Rever estrutura e validações
 
-Paginação
-Ordenação array
-
 tela recuperar senha
 sistema recuperar senha
 
 js bs4 interno (ja resolve pdf)
 
-tipos em cadastro de usuário!!!
+Paginação
+Ordenação array
