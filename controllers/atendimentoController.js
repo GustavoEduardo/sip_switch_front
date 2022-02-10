@@ -1,7 +1,7 @@
 const Connect  = require('../database/Connect');
 const fs = require('fs');
 
-class AtendimentoController{
+class atendimentocontroller{
 
     async exibir(req,res){
         var filtro = {
@@ -105,4 +105,4 @@ class AtendimentoController{
 
 }
 
-module.exports = new AtendimentoController();
+module.exports = new atendimentocontroller();

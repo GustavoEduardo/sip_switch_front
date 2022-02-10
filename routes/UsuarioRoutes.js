@@ -1,7 +1,7 @@
 const Router = require('express').Router;
-const Controller = require('..//controllers/usuarioController');
-const auth = require("..//middlewares/auth");
-const authAdmin = require("..//middlewares/authAdmin");
+const Controller = require('../controllers/usuarioController');
+const auth = require("../middlewares/auth");
+const authAdmin = require("../middlewares/authAdmin");
 
 const usuarioRoutes = Router();
 usuarioRoutes.route('/usuarios').all(auth).all(authAdmin).post(Controller.listar);
