@@ -1,20 +1,13 @@
+link dos arquivos
+
+Rever estrutura e validações
+
+Paginação
+Ordenação array
+
 tela recuperar senha
 sistema recuperar senha
 
-Mensagens de erros
-    midias
-    usuario
+js bs4 interno (ja resolve pdf)
 
-Relatórios...
-    Paginação
-    Ordenação array
-    link pdf
-    link csv
-
-js bs4 interno
-
-listar todos os tipos em cadastro de usuário
-
-validações
-
-
+tipos em cadastro de usuário!!!
