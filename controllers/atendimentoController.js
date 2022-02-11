@@ -1,11 +1,9 @@
 const Connect  = require('../database/Connect');
-const express = require('express');
-const router = express.Router();
 const fs = require('fs');
 
+class AtendimentoController{
 
-
-    router.post("/atendimentos", async (req,res)=>{
+    async exibir(req,res){
         var filtro = {
             hrInit:"00:00:00",
             hrFim:"23:59:00"            
@@ -13,10 +11,9 @@ const fs = require('fs');
         let midias = await Connect("midia").select();
         return res.render("atendimentos", {result:[], midias, filtro, erro:[], anonymous:""}); 
 
-    })  
+    }    
 
-
-    router.post("/atendimentos-listar", async (req,res)=>{ 
+    async listar(req,res){ 
         let filtro = {
                ...req.body
             }
@@ -104,7 +101,8 @@ const fs = require('fs');
         criarCsv(result)
         res.render("atendimentos", {result, filtro, midias, erro:[], anonymous});        
 
-    })
-    
-    module.exports = router;
+    }  
 
+}
+
+module.exports = new AtendimentoController();

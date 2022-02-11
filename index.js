@@ -1,20 +1,14 @@
 const express = require('express');
 const app = express();
-//const routes = require("./routes/routes");
+const routes = require("./routes/routes");
 require('dotenv').config();
 const auth = require("./middlewares/auth");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(express.json({limit: '150mb'}));
-//app.use(routes);
+app.use(routes);
 app.set('view engine', 'ejs');
-
-//Controllers
-const atendimentoController = require("./controllers/AtendimentoController");
-
-//Routers
-app.use('/',atendimentoController);
 
 //pagina Home
 app.post('/home',auth, (req, res) => {
