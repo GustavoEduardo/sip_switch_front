@@ -4,12 +4,11 @@ require('dotenv').config();
 let Connect = knex({
     client: 'mysql2',
     connection: {
-        host :'localhost',
-        user : process.env.DATABASE_USER,
-        port: process.env.DATABASE_PORT,
-        password : process.env.DATABASE_PASSWORD,
-        database : process.env.DATABASE_DATABASE,
-        timezone: process.env.DATABASE_TZ
+        host :"127.0.0.1",
+        user : "admin",
+        port: 3306,
+        password : "admin",
+        database :"asteriskcdrdb"
     }
 });
 
