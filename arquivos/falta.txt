@@ -1,5 +1,9 @@
 link dos arquivos
 
+esconder usuarios de quem não for admin
+
+estrutura do csv de ligações
+
 Rever estrutura e validações
 
 tela recuperar senha
