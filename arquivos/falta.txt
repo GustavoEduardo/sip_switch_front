@@ -1,3 +1,5 @@
+arrumar env
+
 link dos arquivos
 
 esconder usuarios de quem não for admin

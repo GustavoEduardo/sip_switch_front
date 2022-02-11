@@ -77,7 +77,7 @@ class UsuarioController{
             }else{
                 if(usuario){
                     var dados = {id_usuario: usuario[0].id_usuario, nome: usuario[0].nome, tipo: usuario[0].tipo}
-                    dados.token =  await jwt.sign(dados, process.env.SECRET, {
+                    dados.token =  await jwt.sign(dados, "obelix", {
                         expiresIn: 28800 // expires in 8hrs
                     });     
 
