@@ -15,7 +15,7 @@ let auth = (req,res,next,) => {
     
         if(!token) throw 'Acesso não autorizado (code 1)';
         
-        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        jwt.verify(token,"obelix", (err, decoded) => {
           if (err) throw 'Token Invalido.';                  
             //se tudo estiver ok, salva no request para uso posterior  
             req.id = decoded.id_usuario;  
