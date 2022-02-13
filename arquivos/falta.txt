@@ -1,8 +1,6 @@
-arrumar pdf
-
 arrumar env
 
-link dos arquivos
+link dos arquivos https
 
 esconder usuarios de quem não for admin
 
