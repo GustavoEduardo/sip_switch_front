@@ -13,7 +13,8 @@ app.set('view engine', 'ejs');
 //pagina Home
 app.post('/home',auth, (req, res) => {
 	let token= req.body.token
-	res.render("home",{token});
+	let tipo= req.body.tipo
+	res.render("home",{token, tipo});
 });
 //Página de login
 app.get('/', (req, res) => {

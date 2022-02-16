@@ -2,8 +2,6 @@ arrumar env
 
 link dos arquivos https
 
-esconder usuarios de quem não for admin
-
 estrutura do csv de ligações
 
 Rever estrutura e validações

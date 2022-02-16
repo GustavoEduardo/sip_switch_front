@@ -12,7 +12,8 @@
 			</div>		
 		</div>		
 	</div>
-	<input id="token" type="text" value="<%=token%>">
+	<input id="token" type="hidden" value="<%=token%>">
+	<input id="tipo" type="hidden" value="<%=tipo%>">
 
 
 	<script>
@@ -20,6 +21,10 @@
 		   var token = document.getElementById("token").value;	
 		   localStorage.setItem('token',token);
 		   getToken()
+		   var tipo = document.getElementById("tipo").value;	
+		   localStorage.setItem('tipo',tipo);
+
+		   getTipo()
 	   }			
    </script>
 
