@@ -6,6 +6,8 @@ const auth = require("./middlewares/auth");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
+app.use(express.static("arquivos"));
+
 app.use(express.json({limit: '150mb'}));
 app.use(routes);
 app.set('view engine', 'ejs');

@@ -25,7 +25,7 @@
 		<span class="erro"><%=erro.menssagem%></span>
 		<hr>
 		<div class="">
-			<a class="btn btn-outline-success mb-2" target="_blank" href="http://192.168.1.8/arquivos/ligacoes.csv"><i class="fas fa-file-excel"></i> CSV</a>
+			<a id="bt-csv" class="btn btn-outline-success mb-2 disabled" target="_blank" href="http://192.168.1.8:4000/ligacoes.csv"><i class="fas fa-file-excel"></i> CSV</a>
 		</div>
 		<nav class="navbar navbar-dark bg-secondary ">
 			<form class="form-inline ml-auto" method="post" action="atendimentos-listar">
@@ -44,7 +44,7 @@
 				<input class="form-control mr-2 mb-1" type="time" value="<%=filtro.hrInit%>"  id="hrInit"  name="hrInit" required>
 				<input class="form-control mr-3 mb-1" type="time" value="<%=filtro.hrFim%>" id="hrFim" name="hrFim" required>
 	
-			  <button class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
+			  <button onclick="esperar()" class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
 			</form>
 		  </nav>
 		<br>
@@ -70,7 +70,21 @@
 		  </table>
 
 	</div>
-	</div>	
+	</div>
+	
+	<script>
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+		}
+		function esperar(){			
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1 disabled')
+		}
+		
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+		}
+		setTimeout(function(){enableBtn()}, 3000)	
+	</script>
 
 	<%- include ("partials/footer.ejs"); %>
 	

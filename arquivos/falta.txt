@@ -1,15 +1,4 @@
-arrumar env
-
 link dos arquivos https
-
-estrutura do csv de ligações
-
-Rever estrutura e validações
 
 tela recuperar senha
 sistema recuperar senha
-
-js bs4 interno (ja resolve pdf)
-
-Paginação
-Ordenação array

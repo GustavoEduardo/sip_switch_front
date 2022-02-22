@@ -1,5 +1,6 @@
 const Connect  = require('../database/Connect');
 const fs = require('fs');
+const moment = require('moment');
 
 class AtendimentoController{
 
@@ -85,8 +86,8 @@ class AtendimentoController{
         })
         result = numeros3
 
-        async function criarCsv(data){
-            var content = "telefone,data,hora\n"
+        async function criarCsv(data, agr){
+            var content = "telefone,data,hora,data-do-documento: "+agr+"\n"
     
             data.map((call)=>{
                 content = content+call.src+","+call.data+","+call.hora+"\n"
@@ -97,8 +98,8 @@ class AtendimentoController{
             
     
         }
-
-        criarCsv(result)
+        let agr = moment().format("YYYY-MM-DD HH:mm:ss")
+        criarCsv(result, agr)
         res.render("atendimentos", {result, filtro, midias, erro:[], anonymous});        
 
     }  

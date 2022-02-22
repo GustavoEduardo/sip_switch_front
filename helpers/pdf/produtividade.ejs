@@ -5,36 +5,47 @@
     <div class="row">
         <div class="col-3"></div>
         <h2 class="col-6">Produtividade por Ramal</h2>
-        <div class="col-3"></div>
-    </div>	
+        <div class="col-3"></div>        
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Data do documento: <%=agr%></p>
+        </div>
+    </div>
     <table class="table table-striped" id="tabela">
         <thead>
             <tr>
-            <th scope="col">Ramal</th>
-            <th scope="col">Tempo Falado</th>
-            <th scope="col">TMA Total</th>
-            <th scope="col">Efetuadas</th>
-            <th scope="col">Atendidas</th>
-            <th scope="col">N.A.</th>
-            <th scope="col">Ocupadas</th>
-            <th scope="col">Falhas</th>
+                <th onclick="ordenar('src')" id="src" scope="col">Ramal</th>
+                <th scope="col">Tempo Ativo</th>
+                <th scope="col" id="">TMA Ativo</th>
+                <th scope="col" id="">TMA Receptivo</th>
+                <th scope="col" id="">TMA Total</th>
+                <th scope="col" id="">Recebidas</th>
+                <th style="background-color: rgb(231, 231, 231);" scope="col" id="">Efetuadas</th>
+                <th style="background-color: rgb(231, 231, 231);" scope="col" id="">Atendidas</th>
+                <th style="background-color: rgb(231, 231, 231);" scope="col" id="">N.A.</th>
+                <th style="background-color: rgb(231, 231, 231);" scope="col" id="">Ocupadas</th>
+                <th style="background-color: rgb(231, 231, 231);" scope="col" id="">Falhas</th>
             </tr>
-        </thead>
-        <tbody id="lista">		
-            <%vendedores.forEach(v=>{%>
-                <tr>
-                    <td><%=v.ramal%></td>
-                    <td><%=v.tempoTot%></td>
-                    <td><%=v.tmaTot%></td>
-                    <td><%=v.ligEfetuadas%></td>
-                    <td><%=v.atendidas%></td>
-                    <td><%=v.na%></td>
-                    <td><%=v.ocupadas%></td>
-                    <td><%=v.falhas%></td>
-                </tr>
-            <%})%>
-        
-        </tbody>
+            </thead>
+            <tbody id="lista">		
+                <%vendedores.forEach(v=>{%>
+                    <tr>
+                        <td><%=v.ramal%></td>
+                        <td><%=v.tempoTot%></td>
+                        <td><%=v.tmaAtivo%></td>
+                        <td><%=v.tmaReceptivo%></td>
+                        <td><%=v.tmaTot%></td>
+                        <td><%=v.ligRecebidas%></td>
+                        <td><%=v.ligEfetuadas%></td>
+                        <td><%=v.atendidas%></td>
+                        <td><%=v.na%></td>
+                        <td><%=v.ocupadas%></td>
+                        <td><%=v.falhas%></td>
+                    </tr>
+                <%})%>
+            
+            </tbody>
         </table>
 	
 

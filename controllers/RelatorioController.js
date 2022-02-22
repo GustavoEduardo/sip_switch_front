@@ -2,6 +2,8 @@ const Connect  = require('../database/Connect');
 const fs = require('fs');
 const pdf = require('html-pdf');
 const ejs = require('ejs');
+const moment = require('moment');
+
 
 class RelatorioController{
    
@@ -10,102 +12,76 @@ class RelatorioController{
             hrInit:"00:00:00",
             hrFim:"23:59:00",
             tempMin:"00",
-            ordem: "dst",
-            tipoOrdem: "DESC"
+            ordem: "src",
+            tipoOrdem: "ASC"
         }
 
         return res.render("relatorio/qualidadeVendedores", {filtro, vendedores:[], totais:[], erro:[]}); 
 
-    }    
-
+    }
+    
     async listarQualidadeVend(req,res){
         let filtro ={
             ...req.body
         }
-        
+        let de = filtro.dtInit+" "+filtro.hrInit
+        let ate = filtro.dtFim+" "+filtro.hrFim
+        de = moment(de).format("YYYY-MM-DD HH-mm-ss");
+        ate = moment(ate).format("YYYY-MM-DD HH-mm-ss");
         try {
-             //filtrando ligações efetuadas (só ativas!!!)
-            let query = Connect.select().table("cdr").where("calldate",">=",filtro.dtInit)
-            .andWhere("dcontext", "!=", "Supervisores").andWhere("dcontext", "!=", "Ramais-JM")
-            .whereRaw("dstchannel NOT LIKE '%@Discador%'").andWhereBetween("dst", [1000,9999])
-            if(filtro.tempMin){
-                query.andWhere("duration", ">=", filtro.tempMin)
-            }
+             //Filtrando ligações ativas****************************************
+            let query = Connect.select().table("cdr")
+            .whereBetween("calldate",[de,ate])
+            .whereNot("src", "<", 1000).whereNot("src", ">", 5000)
+            .whereNot("userfield", "<", 1000).whereNot("userfield", ">", 5000)
+            
+
             if(filtro.ramal){
-                query.andWhere("dst", "=", filtro.ramal)
+                query.andWhere("src", "=", filtro.ramal)
             }
-            var retorno = await query.orderBy(filtro.ordem,filtro.tipoOrdem);
-            var result= retorno;
+            var ativas = await query.orderBy(filtro.ordem,filtro.tipoOrdem);
+            var result= ativas;
+
+            console.log("Ligações ativas: "+ativas.length)
+
+            //Filtrando ligações recepitivas**************************************
+            let query2 = Connect.select().table("cdr")
+            .where('dstchannel', 'NOT LIKE', '%@Discador%')
+            .whereBetween("calldate",[de,ate])
+            .andWhere("src", ">", 10000000)
+            .andWhere('dcontext','!=','from-internal-xfer')
+
+            var receptivas = await query2;
+
+            console.log("Ligações receptivas (com todos os ramais): "+receptivas.length)
             
         } catch (e) {
             console.log(e)
+            let erro = e.message;
             
             return res.render("relatorio/qualidadeVendedores", {filtro, vendedores:[], totais:[], erro});
         }
 
-        //filtrar data final
-        let retorno2 = [];
-        retorno.map(r=>{
-            var data;
-            if(r.calldate.getMonth()+1 < 10){                        
-                if(r.calldate.getDate() < 10){
-                    data = `${r.calldate.getFullYear()}-0${r.calldate.getMonth()+1}-0${r.calldate.getDate()}`
-                }else{
-                    data = `${r.calldate.getFullYear()}-0${r.calldate.getMonth()+1}-${r.calldate.getDate()}`
-                }
-            }else{
-                if(r.calldate.getDate() < 10){
-                    data = `${r.calldate.getFullYear()}-${r.calldate.getMonth()+1}-0${r.calldate.getDate()}`
-                }else{
-                    data = `${r.calldate.getFullYear()}-${r.calldate.getMonth()+1}-${r.calldate.getDate()}`
-                }
-            }
-                      
-            if(data <= filtro.dtFim){
-                let dtBR= data.split('-')
-                r.data = `${dtBR[2]}/${dtBR[1]}/${dtBR[0]}`;
-                retorno2.push(r)
-            }   
-                
-        })          
-        result = retorno2
-
-        //filtrar horario
-        let retorno3 = []
-        retorno2.map(r=>{
-            var h = new Date(r.calldate)
-            var hora = h.getUTCHours();
-            var min = h.getUTCMinutes();
-
-            if(min < 10){
-                var horario = hora + ':0' + min;
-            }else{
-                var horario = hora + ':' + min;
-            }
-            r.hora = horario;
-
-            if(horario >= filtro.hrInit && horario <= filtro.hrFim){
-                retorno3.push(r)                
-            }      
-                
-        })
-        result = retorno3        
-
-        //cria lista de ramais obitidos
+        //cria lista de ramais encontrados na query1
         let ramais = []         
         result.forEach((r) => {
-            if(!ramais.includes(r.dst)){
-                ramais.push(r.dst)
+            if(!ramais.includes(r.src)){
+                ramais.push(r.src)
             }
-        });        
+        });
 
-        //Cria e popula vendedores
+        //Cria e popula vendedores 
         let vendedores = []
         for(let i=0; i< ramais.length; i++){
             let vend = {
                 ramal: ramais[i],
-                tempoTot: 0,
+                tempoReceptivo: 0,
+                tmaReceptivo: 0,
+                tempoAtivo: 0,
+                tmaAtivo: 0,
+                tempoTot:0,
                 tmaTot: 0,
+                ligRecebidas:0,
                 ligEfetuadas: 0,
                 atendidas: 0,
                 na:0,
@@ -117,24 +93,23 @@ class RelatorioController{
 
         //para resumo do relatório
         let totais = {
+            ligRecebidas: 0,
             ligEfetuadas: 0,
             atendidas: 0,
             na:0,
             ocupadas:0,
             falhas:0
-        }
-
-        //ordena array vendedores pelo ramal
-        // vendedores.sort(function(a,b) {
-        //     return a.ramal < b.ramal ? -1 : a.ramal > b.ramal ? 1 : 0;
-        // });
+        }       
         
-        //atualiza valores
+        var secMin =0;
+        if(filtro.tempMin){
+          secMin = filtro.tempMin
+        }
+        //atualiza valores com ligações ativas
         result.map(r=>{
             for(let i=0; i< vendedores.length; i++){
-                if(r.dst == vendedores[i].ramal){
-                    vendedores[i].hrFalada = vendedores[i].hrFalada +r.duration;
-                    vendedores[i].tempoTot = vendedores[i].tempoTot + r.duration
+                if(r.src == vendedores[i].ramal && r.billsec >=secMin){
+                    vendedores[i].tempoAtivo = vendedores[i].tempoAtivo + r.billsec
                     vendedores[i].ligEfetuadas = vendedores[i].ligEfetuadas+1;
                     totais.ligEfetuadas++
 
@@ -154,64 +129,132 @@ class RelatorioController{
                         console.log("Satatus não definido")
                     }
 
-                    vendedores[i].tmaTot=  Math.round((vendedores[i].tempoTot /  vendedores[i].ligEfetuadas))
+                    vendedores[i].tmaAtivo=  Math.round((vendedores[i].tempoAtivo /  vendedores[i].ligEfetuadas))
                     
                 }
             }
         })
 
-        //formatar segundos tempoTot
-        for(let i=0; i< vendedores.length; i++){
-            let hr;
-            let min;
-            let seg;
-            seg = vendedores[i].tempoTot % 60;
-            min = parseInt(vendedores[i].tempoTot / 60);
-            hr= parseInt(min/60);
-            min = min - (60* hr)            
+        //Para atualizar com ligalçoes receptivos
+        var atualizaVendedores = (ramal, r)=>{
+            console.log("---------------atualizaVendedores------------------- Ramal: "+ramal)
+            for(let i=0; i< vendedores.length; i++){
+                if(ramal == vendedores[i].ramal){                    
+                    vendedores[i].tempoReceptivo = vendedores[i].tempoReceptivo + r.billsec
+                    vendedores[i].ligRecebidas = vendedores[i].ligRecebidas+1;
+                    totais.ligRecebidas++
 
-            if(min < 10){
-               min = "0"+min.toString() 
+                    vendedores[i].tmaReceptivo=  Math.round((vendedores[i].tempoReceptivo /  vendedores[i].ligRecebidas))                    
+                }
             }
-            if(seg < 10){
-                seg = "0"+seg.toString() 
-            }
-            vendedores[i].tempoTot = hr+":"+min+":"+seg
         }
 
-        //formatar segundos tmaTot
-        for(let i=0; i< vendedores.length; i++){
-            let hr;
-            let min;
-            let seg;
-            seg = vendedores[i].tmaTot % 60;
-            min = parseInt(vendedores[i].tmaTot / 60);
-            hr= parseInt(min/60);
-            min = min - (60* hr)            
+        //atualiza valores com ligações receptivas
+        receptivas.forEach(r=>{
+            if(r.billsec >=secMin){
+                let barra = r.dstchannel.indexOf("/")
+                let ramal = r.dstchannel[barra+1]+r.dstchannel[barra+2]+r.dstchannel[barra+3]+r.dstchannel[barra+4]
+                if(filtro.ramal && filtro.ramail != ramal){
+                    return
+                }else{
+                    if(r.dstchannel[barra+5] == "@"){                
+                        if(ramais.includes(ramal)){
+                            atualizaVendedores(ramal, r)
+                        }else{                            
+                            let vendNovo = {
+                                ramal: ramal,
+                                tempoReceptivo: 0,
+                                tmaReceptivo: 0,
+                                tempoAtivo: 0,
+                                tmaAtivo: 0,
+                                tempoTot:0,
+                                tmaTot: 0,
+                                ligRecebidas:0,
+                                ligEfetuadas: 0,
+                                atendidas: 0,
+                                na:0,
+                                ocupadas:0,
+                                falhas:0
+                            }
+                            console.log("Não recebei ligou só recebeu>>>>>>>>>>>>> "+ramal)
+                            vendedores.push(vendNovo)
+                            atualizaVendedores(ramal, r)
+                        }
+                    }else if(r.dstchannel[barra+5] == "-"){
+                        if(r.dst == ramal || r.dst <= 9000){
+                            if(ramais.includes(ramal)){
+                                atualizaVendedores(ramal, r)
+                            }else{
+                                let vendNovo = {
+                                    ramal: ramal,
+                                    tempoReceptivo: 0,
+                                    tmaReceptivo: 0,
+                                    tempoAtivo: 0,
+                                    tmaAtivo: 0,
+                                    tempoTot:0,
+                                    tmaTot: 0,
+                                    ligRecebidas:0,
+                                    ligEfetuadas: 0,
+                                    atendidas: 0,
+                                    na:0,
+                                    ocupadas:0,
+                                    falhas:0
+                                }
+                                vendedores.push(vendNovo)
+                                atualizaVendedores(ramal, r)
+                            }
+                        }
+                    }
 
-            if(min < 10){
-               min = "0"+min.toString() 
+                }                
+            }      
+            
+        })
+
+        //função formatar segundos em hr
+        function segParaHora(time, with_seg = true){
+    
+            var hours = Math.floor( time / 3600 );
+            var minutes = Math.floor( (time % 3600) / 60 );
+            var seconds = time % 60;
+              
+            minutes = minutes < 10 ? '0' + minutes : minutes;      
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            hours = hours < 10 ? '0' + hours : hours;
+              
+            if(with_seg){
+               return  hours + ":" + minutes + ":" + seconds;
             }
-            if(seg < 10){
-                seg = "0"+seg.toString() 
-            }
-            vendedores[i].tmaTot = hr+":"+min+":"+seg
-        }  
+              
+            return  hours + ":" + minutes;
+        }
+       
+         //formatar todos os campos de segundos em horas
+         for(let i=0; i< vendedores.length; i++){ 
+            vendedores[i].tempoTot = vendedores[i].tempoAtivo + vendedores[i].tempoReceptivo
+            vendedores[i].tempoTot = segParaHora(vendedores[i].tempoTot)            
+            vendedores[i].tmaAtivo = segParaHora(vendedores[i].tmaAtivo)
+            vendedores[i].tmaReceptivo = segParaHora(vendedores[i].tmaReceptivo)
+            vendedores[i].tmaTot = Math.round((vendedores[i].tempoAtivo + vendedores[i].tempoReceptivo ) / (vendedores[i].ligEfetuadas + vendedores[i].ligRecebidas))
+            vendedores[i].tmaTot = segParaHora(vendedores[i].tmaTot)
+        }
+
        
         //cria csv
-        async function criarCsv(data){
-            var content = "Ramal,Tempo Falado,TMA Total,Efetuadas,Atendidas,NA,Ocupadas,Falhas\n"  
+        async function criarCsv(data, agr){
+            var content = "Ramal,Tempo Total,TMA Ativo,TMA Receptivo, TMA Total,Efetuadas,Atendidas,NA,Ocupadas,Falhas,data-do-documento: "+agr+"\n"  
     
             data.map((d)=>{
-                content = content+d.ramal+","+d.tempoTot+","+d.tmaTot+","+d.ligEfetuadas+","+d.atendidas+","+d.na+","+d.ocupadas+","+d.falhas+"\n"
+                content = content+d.ramal+","+d.tempoTot+","+d.tmaAtivo+","+d.tmaReceptivo+","+d.tmaTot+","+d.ligEfetuadas+","+d.atendidas+","+d.na+","+d.ocupadas+","+d.falhas+"\n"
             })    
             await fs.writeFileSync('arquivos/produtividade.csv', content)             
     
         }
-        criarCsv(vendedores)
+        let agr = moment().format("YYYY-MM-DD HH:mm:ss")
+        criarCsv(vendedores, agr)
 
         //cria pdf
-        ejs.renderFile('./helpers/pdf/produtividade.ejs',{vendedores},(err, html)=>{
+        ejs.renderFile('./helpers/pdf/produtividade.ejs',{vendedores,agr},(err, html)=>{
             if(err){
                 console.log("Erro ao renderizar EJS de produtividade")
             }else{
@@ -237,7 +280,7 @@ class RelatorioController{
        
         return res.render("relatorio/qualidadeVendedores", {filtro, vendedores, totais, erro:{}});
 
-    }  
+    } 
 
 }
 

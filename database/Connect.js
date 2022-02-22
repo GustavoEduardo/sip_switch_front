@@ -4,7 +4,7 @@ require('dotenv').config();
 let Connect = knex({
     client: 'mysql2',
     connection: {
-        host :"127.0.0.1",
+        host :"192.168.1.8",
         user : "admin",
         port: 3306,
         password : "admin",

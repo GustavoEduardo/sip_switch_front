@@ -16,7 +16,8 @@
 				</div>
 				<div class="col-md-3">
 					<h3>Resultado da Busca</h3>
-					<span>Encontradas: </span><span id="encontradas"><%=totais.ligEfetuadas%></span><br>
+					<span>Recebidas: </span><span id="totReceptivas"><%=totais.ligRecebidas%></span><br>
+					<span>Efetuadas: </span><span id="totAtivas"><%=totais.ligEfetuadas%></span><br>
 					<span>Antendidas: </span><span id="atendidas"><%=totais.atendidas%></span><br>
 					<span>NA: </span><span id="na"><%=totais.na%></span><br>
 					<span>Ocupadas: </span><span id="ocupadas"><%=totais.ocupadas%></span><br>
@@ -34,8 +35,8 @@
 			<span class="erro"><%=erro.menssagem%></span>
 			<hr>
 			<div class="">
-				<a class="btn btn-outline-success mb-2 mr-1" target="_blank" href="http://192.168.1.8/arquivos/produtividade.csv"><i class="fas fa-file-excel"></i> CSV</a>
-				<a class="btn btn-outline-danger mb-2 mr-1" target="_blank" href="http://192.168.1.8/arquivos/produtividade.pdf"><i class="fas fa-file-pdf"></i> PDF</a>				
+				<a id="bt-csv" class="btn btn-outline-success mb-2 mr-1 disabled" target="_blank" href="http://192.168.1.8:4000/produtividade.csv"><i class="fas fa-file-excel"></i> CSV</a>
+				<a id="bt-pdf" class="btn btn-outline-danger mb-2 mr-1 disabled" target="_blank" href="http://192.168.1.8:4000/produtividade.pdf"><i class="fas fa-file-pdf"></i> PDF</a>				
 			</div>
 			<nav class="navbar navbar-dark bg-secondary ">
 				<form id="form-qualidade"  class="form-inline ml-auto" method="post" action="relatorios-vendedores-lista">
@@ -52,7 +53,7 @@
 
 					<input type="hidden" id="ordem" name="ordem"  value="<%=filtro.ordem%>">
 					<input type="hidden" id="tipoOrdem" name="tipoOrdem" value="<%=filtro.tipoOrdem%>">
-					<button class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
+					<button onclick="esperar()" class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
 				</form>
 			</nav>
 			<br>
@@ -60,14 +61,17 @@
 			<table class="table table-striped" id="tabela">
 				<thead>
 				<tr>
-					<th onclick="ordenar('dst')" scope="col">Ramal</th>
-					<th onclick="ordenar('duration')" scope="col">Tempo Falado</th>
-					<th scope="col">TMA Total</th>
-					<th scope="col">Efetuadas</th>
-					<th scope="col">Atendidas</th>
-					<th scope="col">N.A.</th>
-					<th scope="col">Ocupadas</th>
-					<th scope="col">Falhas</th>
+					<th onclick="ordenar('src')" id="src" scope="col">Ramal</th>
+					<th scope="col">Tempo Ativo</th>
+					<th scope="col" id="">TMA Ativo</th>
+					<th scope="col" id="">TMA Receptivo</th>
+					<th scope="col" id="">TMA Total</th>
+					<th scope="col" id="">Recebidas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Efetuadas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Atendidas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">N.A.</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Ocupadas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Falhas</th>
 				</tr>
 				</thead>
 				<tbody id="lista">		
@@ -75,7 +79,10 @@
 						<tr>
 							<td><%=v.ramal%></td>
 							<td><%=v.tempoTot%></td>
+							<td><%=v.tmaAtivo%></td>
+							<td><%=v.tmaReceptivo%></td>
 							<td><%=v.tmaTot%></td>
+							<td><%=v.ligRecebidas%></td>
 							<td><%=v.ligEfetuadas%></td>
 							<td><%=v.atendidas%></td>
 							<td><%=v.na%></td>
@@ -92,7 +99,7 @@
 
 	<%- include ("../partials/footer.ejs"); %>
 	<script>
-		function ordenar(order){			
+		function ordenar(order){
 			let form = document.getElementById('form-qualidade');
 			
 			var ordem = document.getElementById("ordem");
@@ -107,23 +114,46 @@
 			}			
 			ordem.value = order;
 
+			var hr = document.getElementById(order)
+			hr.removeAttribute("onclick")
+			hr.style.color = "#b1b1b1"
+			
 			form.submit()	
 
 		}
 	</script>
 
+	<script>
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1')
+
+		}
+		function esperar(){			
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1 disabled')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1 disabled')
+		}
+		
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1')
+
+		}
+		setTimeout(function(){enableBtn()}, 3000)	
+	</script>
+
 
 	<script>
-	var encontradas = document.getElementById("encontradas").innerHTML;
+	var totAtivas = document.getElementById("totAtivas").innerHTML;
 	var atendidas = document.getElementById('atendidas').innerHTML;
 	var na = document.getElementById("na").innerHTML;
 	var ocupadas = document.getElementById("ocupadas").innerHTML;
 	var falhas = document.getElementById("falhas").innerHTML;
 
-	atendidas = ((atendidas *100)/encontradas).toFixed(2);
-	na = ((na *100)/encontradas).toFixed(2);
-	ocupadas = ((ocupadas *100)/encontradas).toFixed(2);
-	falhas = ((falhas *100)/encontradas).toFixed(2);
+	atendidas = ((atendidas *100)/totAtivas).toFixed(2);
+	na = ((na *100)/totAtivas).toFixed(2);
+	ocupadas = ((ocupadas *100)/totAtivas).toFixed(2);
+	falhas = ((falhas *100)/totAtivas).toFixed(2);
 		
 		const labels = [
 			'Atendidas',
