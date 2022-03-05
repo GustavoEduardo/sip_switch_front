@@ -3,6 +3,8 @@ const moment = require('moment');
 const bcryptjs = require('bcryptjs');
 require('dotenv').config();
 var jwt = require('jsonwebtoken');
+const {base64encode, base64decode} = require('nodejs-base64');
+const EmailTemplateService = require('../helpers/email/EmailTemplateService');
 
 
 class UsuarioController{
@@ -103,6 +105,79 @@ class UsuarioController{
 
         return res.redirect("/login");
 
+    }
+
+    async esqueciasenha(req, res){
+        return res.render("usuario/esqueciasenha");
+    }
+
+    async recuperarSenha (req, res){
+        try {
+            let  email= req.body.email;
+        
+            let user = await Connect("usuario").select().where({email});
+            if(!user){
+                throw 'Nenhum usuario enconrado com esse email'
+            }
+            
+            let token = user.email+"~"+moment().format('YYYY-MM-DD HH:mm:ss');
+            token = base64encode(token);
+            let link = `http://localhost:4000/novasenha/${token}`;
+            let data = {
+                email: user.email,
+                replaces: {
+                    link
+                }
+            };
+            EmailTemplateService.recuperarSenha(data);
+            return res.render("usuario/login", {dados:[], erro:{menssagem: "Um email de recuperação foi enviado para "+email}});
+            
+        } catch (e) {
+            console.log(e)
+            let erro = {
+                menssagem: e,
+                erro: e,
+                codigo: 400
+            }
+            return res.render("usuario/login", {dados:[], erro});
+            
+        }
+
+    }
+
+    async alterarSenha (req, res){
+        let {token, senha, confirmeSenha} = req.body;
+        token = base64decode(token)
+            let dados = token.split("~")
+            let data ={
+                email: dados[0],
+                data: dados[1],
+                senha
+            }
+                       
+            if(moment().subtract(15, 'minutes').format('YYYY-MM-DD HH:mm:ss') > tokenDecode.data){  
+               throw('Token de recuperação expirado')
+            }
+    
+            if(senha != confirmeSenha){
+                throw('As senhas devem ser iguais')
+            }
+    
+            if(!tokenDecode.email ||!tokenDecode.data){
+                throw('Token Inválido')
+            }
+            
+           
+            var salt = bcryptjs.genSaltSync(parseInt(process.env.SALT));
+
+            let up ={            
+                senha : bcryptjs.hashSync(data.senha, salt),
+                modificado : moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+           
+            await Connect.table("usuario").update(up).where({email});
+                 
+        
     }
 
 }

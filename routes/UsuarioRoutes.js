@@ -15,5 +15,8 @@ usuarioRoutes.route('/login').get(Controller.login);
 usuarioRoutes.route('/login').post(Controller.logar);
 usuarioRoutes.route('/logout').get(Controller.logout);
 
+usuarioRoutes.route('/esqueciasenha').get(Controller.esqueciasenha);
+usuarioRoutes.route('/recuperarsenha').post(Controller.recuperarSenha);
+
 
 module.exports = usuarioRoutes;
