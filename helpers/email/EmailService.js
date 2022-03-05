@@ -1,10 +1,11 @@
-const nodemailer= require('nodemailer');
+const nodemailer = require('nodemailer');
 const path = require("path");
 const fs = require("fs");
 
-class EmailService{
+class Email{
 
-    async send({to, message, bcc}){
+    async send(data){
+        if(!data.email) data.email = "gustavolimaeduardo@gmail.com"
         try { 
             //587 false
             const transporter = nodemailer.createTransport({
@@ -13,16 +14,17 @@ class EmailService{
                 secure: true,
                 auth: {
                     user: "gustavolimaeduardodev@gmail.com",
-                    pass: "@choqueE123"
+                    pass: ""
                 }
-            }) 
-            let response = transporter.sendMail({
-                from: "gustavolimaeduardodev@gmail.com",
-                to:"gustavolimaeduardo@gmail.com",
-                subject: message.subject,
-                text: message.body.replace(/(<([^>]+)>)/ig, ""),
-                html: message.body                
             })
+            let msg = {
+                from: "gustavolimaeduardodev@gmail.com",
+                to:data.email,
+                subject: data.message.subject,
+                text: data.message.body.replace(/(<([^>]+)>)/ig, ""),
+                html: data.message.body                
+            }
+            transporter.sendMail(msg)
             console.log("Enviando email")            
             return true
 
@@ -32,7 +34,7 @@ class EmailService{
         }
     }
 
-    template(filename, replaces =""){
+    template (filename, replaces =""){
         try {
 
             let pathname = path.resolve(__dirname, `templates/${filename}`)
@@ -51,6 +53,8 @@ class EmailService{
 
 }
 
-module.exports = EmailService;
+    
+
+module.exports = Email;
 
 

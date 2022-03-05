@@ -1,16 +1,12 @@
-const EmailService = require("./EmailService")
- 
+const EmailService = require("./EmailService") 
   
     async function recuperarSenha(data ={}){
-
-        const mail = new EmailService()
+        let mail = new EmailService()
         const template = mail.template("recuperarSenha.html", data.replaces)
-        const subject = "Redefina sua senha do app Facinnius"
+        const subject = "Redefina sua senha do app Sip Switch"
         
         return await mail.send({
-            to: {
-                email: data.email
-            },
+            to: data.to,
             message: {
                 subject: subject,
                 body: String(template)
