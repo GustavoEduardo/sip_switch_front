@@ -6,7 +6,7 @@ const EmailService = require("./EmailService")
         const subject = "Redefina sua senha do app Sip Switch"
         
         return await mail.send({
-            to: data.to,
+            to: data.email,
             message: {
                 subject: subject,
                 body: String(template)
@@ -15,4 +15,4 @@ const EmailService = require("./EmailService")
         
     } 
 
-module.exports = recuperarSenha();
+module.exports = {recuperarSenha};

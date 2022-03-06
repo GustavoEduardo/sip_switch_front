@@ -1,125 +1,37 @@
 <%- include ("../partials/head.ejs"); %>
 
-<script>
-	 localStorage.setItem('token',"");
-	 localStorage.setItem('tipo',"");
-</script>
+<div class="container" style="margin-top: 10%; border: 1px solid rgb(207, 207, 207); padding: 20px;">
+    <h2>Nova Senha</h2>
+    <hr>
+    <form action="/alterarsenha" method="POST">
+		<input type="hidden" name="tokenPass" id="tokenPass">
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" name="senha" class="form-control">
+        </div>
+		<div class="form-group">
+			<label>Repita a Senha</label>
+			<input type="password" name="confirmeSenha" class="form-control">
+		  </div>       
+        <button type="submit" class="btn btn-primary">Salvar</button>      
+      </form>
+	  <div class="row mt-4">
+		<span class="erro mt-1"><%=erro.menssagem%></span>	
+	  </div>	  
+</div>
 
-<style>
-	body {
-    font-family: "Lato", sans-serif;
-}
-
-.main-head{
-    height: 150px;
-    background: #FFF;
-   
-}
-
-.sidenav {
-    height: 100%;
-	opacity: 0.8;
-    background-color: #2d204e;
-    overflow-x: hidden;
-    padding-top: 20px;
-}
-
-.main {
-    padding: 0px 10px;
-}
-
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-}
-
-@media screen and (max-width: 450px) {
-    .login-form{
-        margin-top: 10%;
-    }
-
-    .register-form{
-        margin-top: 10%;
-    }
-}
-
-@media screen and (min-width: 768px){	
-    .main{
-        margin-right: 30%;
-		margin-left: 15%;
-		padding-top: 10%;
-    }
-
-    .sidenav{
-        width: 40%;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        right: 0;
-    }
-
-    .login-form{
-        margin-top: 30%;
-    }
-
-    .register-form{
-        margin-top: 20%;
-    }
-}
-
-
-.login-main-text{
-    margin-top: 20%;
-    padding: 60px;
-    color: #fff;
-}
-
-.login-main-text h2{
-    font-weight: 300;
-}
-
-</style>
-
-<body style="background-color: rgb(230, 230, 230);">
-		
-	<div class="sidenav">
-		<div class="login-main-text">
-			<hr>
-		   <h1>Sip Switch</h1>
-		   <h5>Soluções de telefonia e produtividade para Call Centers</h5>
-		   <hr>
-		   <h6>Entre com email e senha para ter acesso ao sistema.</h6>
-		</div>
-	 </div>
-	 <div class="main">
-		<div class="col-md-6 col-sm-12">
-		   <div class="login-form">
-			  <form method="POST" action="login">
-				 <div class="form-group">
-					<label>Email</label>
-					<input type="email" name="login" class="form-control" placeholder="email">
-				 </div>
-				 <div class="form-group">
-					<label>Senha</label>
-					<input type="password" name="senha" class="form-control" placeholder="senha">
-				 </div>
-				 <div class="row">
-					 <div class="col">
-						<!-- <a href="" class="link">Esqueci a senha</a> -->
-					 </div>
-					 <div class="col">
-						<button type="submit" class="btn btn-info" style="width: 100%;">Entrar</button>
-					</div>
-				 </div>
-				 <div class="row mt-4">
-					<span class="erro mt-1"><%=erro.menssagem%></span>	
-				 </div>
-			  </form>
-		   </div>
-		</div>
-	 </div>
-	
-
-	<%- include ("../partials/footer.ejs"); %>
+<%- include ("../partials/footer.ejs"); %>
 	
 </body>
 </html>
+
+<script>
+	function tokenDeSenha(){
+		var urlAtual = window.location.href;
+		let url= urlAtual.split('/')
+		let tk = url[4]
+		document.getElementById('tokenPass').value = tk
+	}
+
+	tokenDeSenha()
+</script>

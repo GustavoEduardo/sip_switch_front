@@ -1,4 +1,9 @@
 link dos arquivos https
 
-tela recuperar senha
-sistema recuperar senha
+Bug ramal duplicado
+
+Estrutura exel para vanroy
+
+revisar dados receptivo no relatório
+
+dados no env

@@ -4,8 +4,7 @@ const fs = require("fs");
 
 class Email{
 
-    async send(data){
-        if(!data.email) data.email = "gustavolimaeduardo@gmail.com"
+    async send(data){  
         try { 
             //587 false
             const transporter = nodemailer.createTransport({
@@ -13,13 +12,13 @@ class Email{
                 port: 465,
                 secure: true,
                 auth: {
-                    user: "gustavolimaeduardodev@gmail.com",
-                    pass: ""
+                    user: "sipswitchsistema@gmail.com",
+                    pass: "mudar123"
                 }
             })
             let msg = {
-                from: "gustavolimaeduardodev@gmail.com",
-                to:data.email,
+                from: "sipswitchsistema@gmail.com",
+                to:data.to,
                 subject: data.message.subject,
                 text: data.message.body.replace(/(<([^>]+)>)/ig, ""),
                 html: data.message.body                

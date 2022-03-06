@@ -17,6 +17,8 @@ usuarioRoutes.route('/logout').get(Controller.logout);
 
 usuarioRoutes.route('/esqueciasenha').get(Controller.esqueciasenha);
 usuarioRoutes.route('/recuperarsenha').post(Controller.recuperarSenha);
+usuarioRoutes.route('/novasenha/:token').get(Controller.novasenha);
+usuarioRoutes.route('/alterarsenha').post(Controller.alterarSenha);
 
 
 module.exports = usuarioRoutes;

@@ -120,11 +120,11 @@ class UsuarioController{
                 throw 'Nenhum usuario enconrado com esse email'
             }
             
-            let token = user.email+"~"+moment().format('YYYY-MM-DD HH:mm:ss');
+            let token = user[0].email+"~"+moment().format('YYYY-MM-DD HH:mm:ss');
             token = base64encode(token);
             let link = `http://localhost:4000/novasenha/${token}`;
             let data = {
-                email: user.email,
+                email: user[0].email,
                 replaces: {
                     link
                 }
@@ -145,17 +145,22 @@ class UsuarioController{
 
     }
 
+    async novasenha(req, res){
+        return res.render("usuario/novasenha", {token: "", erro:{}});
+    }
+
     async alterarSenha (req, res){
-        let {token, senha, confirmeSenha} = req.body;
-        token = base64decode(token)
+        let {tokenPass, senha, confirmeSenha} = req.body;
+        try {            
+            let token = base64decode(tokenPass)
             let dados = token.split("~")
             let data ={
                 email: dados[0],
                 data: dados[1],
                 senha
-            }
-                       
-            if(moment().subtract(15, 'minutes').format('YYYY-MM-DD HH:mm:ss') > tokenDecode.data){  
+            } 
+
+            if(moment().subtract(15, 'minutes').format('YYYY-MM-DD HH:mm:ss') > data.data){  
                throw('Token de recuperação expirado')
             }
     
@@ -163,19 +168,29 @@ class UsuarioController{
                 throw('As senhas devem ser iguais')
             }
     
-            if(!tokenDecode.email ||!tokenDecode.data){
+            if(!data.email || !data.data){
                 throw('Token Inválido')
-            }
-            
+            }            
            
             var salt = bcryptjs.genSaltSync(parseInt(process.env.SALT));
 
             let up ={            
                 senha : bcryptjs.hashSync(data.senha, salt),
                 modificado : moment().format('YYYY-MM-DD HH:mm:ss')
+            }           
+            await Connect.table("usuario").update(up).where({email:data.email});
+             res.redirect("/login")
+        } catch (e) {
+            console.log(e)
+            let erro = {
+                menssagem: e,
+                erro: e,
+                codigo: 400
             }
-           
-            await Connect.table("usuario").update(up).where({email});
+            return res.render("usuario/novasenha", {token: tokenPass, erro});
+        }
+        
+        
                  
         
     }
