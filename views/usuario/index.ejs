@@ -1,0 +1,57 @@
+
+<%- include ("../partials/head.ejs"); %>
+
+<body style="background-color: rgba(230, 230, 230, 0.555);">
+	<%- include ("../partials/header.ejs"); %>
+
+	<div class="centro" style="margin-top: -5%;">
+		<h1>Usuários Cadastrados</h1>
+		<br>
+		<a href="/usuario-cadastrar" title="Cadastrar novo Usuário" class="btn btn-lg btn-outline-success mb-2" style="border-radius: 50%;"><i class="fas fa-plus"></i></a>
+		<hr>		
+		<div style="border:1px solid rgb(151, 151, 151); width: 75%; background-color: white;">
+			<table class="table table-striped" id="tabela">
+				<thead>
+					<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nome</th>
+					<th scope="col">Email</th>
+					<th scope="col">Ações</th>
+					</tr>
+				</thead>
+				<tbody id="lista">
+					<%usuarios.forEach(u=>{%>
+					<tr>
+						<td><%=u.id_usuario%></td>
+						<td><%-u.nome%></td>
+						<td><%=u.email%></td>
+						<td>
+							<a href="/usuario-editar/<%= u.id_usuario%>" class="btn btn-outline-info mr-2"><i class="fas fa-pencil-alt"></i> Editar</a>
+							<form style="display: inline;" method="post" action="usuario-deletar" onsubmit="confirmaExclusao(event,this)">
+								<input name="token" type="hidden" class="token">
+								<input type="hidden" name="id" value="<%=u.id_usuario%>">
+								<button type="submit" class="btn btn-outline-danger" ><i class="fas fa-backspace"></i> Excluir</button>
+							</form>	
+						</td>
+					</tr>
+					<%})%>
+				
+				</tbody>
+			</table>
+		</div>		
+	</div>
+
+	<%- include ("../partials/footer.ejs"); %>
+
+	<script>		
+		function confirmaExclusao(event, form){
+			event.preventDefault();//não executa o evento.
+			var decision = confirm("Quer mesmo excluir esse Usuário?");//Caixa com opção ok ou cancelar
+			if(decision){
+				form.submit();
+			}
+		}
+	</script>
+	
+</body>
+</html>

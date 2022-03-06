@@ -4,3 +4,31 @@
     background-color: #2d204e;
 }
 
+.centro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.link:hover{
+    background-color: #d4cfe015;
+    border-radius: 1px;
+}
+
+.statusLigacoes{
+    width: 20%;
+}
+
+.grafico-status{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.erro{
+    color: rgb(209, 20, 20);
+    padding: 10px;
+    font-size: 1.2em;
+}

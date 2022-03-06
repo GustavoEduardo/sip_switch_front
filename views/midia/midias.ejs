@@ -1,0 +1,63 @@
+
+<%- include ("../partials/head.ejs"); %>
+
+<body style="background-color: rgba(230, 230, 230, 0.555);">
+	<%- include ("../partials/header.ejs"); %>
+
+	<div class="centro" style="margin-top: -5%;">
+		<h1>Lista de Mídias Cadastradas</h1>
+		<br>
+		<a href="/midia-cadastrar" title="Cadastrar nova Mídia"  class="btn btn-lg btn-outline-success mb-2" style="border-radius: 50%;"><i class="fas fa-plus"></i></a>
+		<hr>		
+		<div style="border:1px solid rgb(151, 151, 151); width: 75%; background-color: white;">
+			<table class="table table-striped" id="tabela">
+				<thead>
+					<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nome</th>
+					<th scope="col">Telefone</th>
+					<th scope="col">Descrição</th>
+					<th scope="col">Ações</th>
+					</tr>
+				</thead>
+				<tbody id="lista">
+					<%midias.forEach(m=>{%>
+					<tr>
+						<td><%=m.id_midia%></td>
+						<td><%-m.nome%></td>
+						<td><%=m.telefone%></td>
+						<td><%-m.descricao%></td>
+						<td>
+							<a href="/midia-editar/<%= m.id_midia%>" class="btn btn-outline-info mr-2"><i class="fas fa-pencil-alt"></i> Editar</a>
+							<form style="display: inline;" method="post" action="midia-deletar" onsubmit="confirmaExclusao(event,this)">
+								<input name="token" type="hidden" class="token">
+								<input type="hidden" name="id" value="<%=m.id_midia%>">
+								<button type="submit" class="btn btn-outline-danger" ><i class="fas fa-backspace"></i> Excluir</button>
+							</form>	
+						</td>
+					</tr>
+				<%})%>
+				
+				</tbody>
+			</table>
+		</div>		
+	</div>
+	
+
+
+	
+
+	<%- include ("../partials/footer.ejs"); %>
+
+	<script>		
+		function confirmaExclusao(event, form){
+			event.preventDefault();//não executa o evento.
+			var decision = confirm("Quer mesmo excluir essa mídia?");//Caixa com opção ok ou cancelar
+			if(decision){
+				form.submit();
+			}
+		}
+		</script>
+	
+</body>
+</html>

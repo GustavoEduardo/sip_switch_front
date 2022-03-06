@@ -1,0 +1,197 @@
+
+<%- include ("../partials/head.ejs"); %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<body style="background-color: rgba(230, 230, 230, 0.555);">
+	<%- include ("../partials/header.ejs"); %>
+	
+	<div class="principal">
+		<div class="painel">
+			<br>
+			<div>
+				<div class="form-row">
+				<div class="col-md-6">
+					<h1>&nbsp Relatório de Produtovidade</h1>
+					<br>					
+				</div>
+				<div class="col-md-3">
+					<h3>Resultado da Busca</h3>
+					<span>Recebidas: </span><span id="totReceptivas"><%=totais.ligRecebidas%></span><br>
+					<span>Efetuadas: </span><span id="totAtivas"><%=totais.ligEfetuadas%></span><br>
+					<span>Antendidas: </span><span id="atendidas"><%=totais.atendidas%></span><br>
+					<span>NA: </span><span id="na"><%=totais.na%></span><br>
+					<span>Ocupadas: </span><span id="ocupadas"><%=totais.ocupadas%></span><br>
+					<span>Falhas: </span><span id="falhas"><%=totais.falhas%></span><br>
+					</div>
+					<div class="grafico-status col-md-2">
+						<h5>Resultado em %</h5>
+						<canvas id="statusLigacoes"></canvas>
+					</div>
+					<div class="statusLigacoes col-1"></div>
+				</div>
+			</div>
+
+			<br>
+			<span class="erro"><%=erro.menssagem%></span>
+			<hr>
+			<div class="">
+				<a id="bt-csv" class="btn btn-outline-success mb-2 mr-1 disabled" target="_blank" href="http://192.168.1.8:4000/produtividade.csv"><i class="fas fa-file-excel"></i> CSV</a>
+				<a id="bt-pdf" class="btn btn-outline-danger mb-2 mr-1 disabled" target="_blank" href="http://192.168.1.8:4000/produtividade.pdf"><i class="fas fa-file-pdf"></i> PDF</a>				
+			</div>
+			<nav class="navbar navbar-dark bg-secondary ">
+				<form id="form-qualidade"  class="form-inline ml-auto" method="post" action="relatorios-vendedores-lista">
+					<input name="token" type="hidden" class="token">
+					<input class="form-control mr-2 mb-1" name="ramal" type="number" min="0" max="9999" value="<%=filtro.ramal%>" placeholder="Ramal">
+					<b class="nav-item mr-1">Segundos: </b>
+					<input style="width:70px;" class="form-control mr-2 mb-1" name="tempMin" type="number" value="<%=filtro.tempMin%>" placeholder="Seg..">							
+					<b class="nav-item mr-1">Período: </b>
+					<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtInit%>" id="dtInit"  name="dtInit" required>
+					<input class="form-control mr-2 mb-1" type="date" value="<%=filtro.dtFim%>"  id="dtFim" name="dtFim" required>
+					<b class="nav-item mr-1">Horário: </b>
+					<input class="form-control mr-2 mb-1" type="time" value="<%=filtro.hrInit%>"  id="hrInit"  name="hrInit" required>
+					<input class="form-control mr-3 mb-1" type="time" value="<%=filtro.hrFim%>" id="hrFim" name="hrFim" required>
+
+					<input type="hidden" id="ordem" name="ordem"  value="<%=filtro.ordem%>">
+					<input type="hidden" id="tipoOrdem" name="tipoOrdem" value="<%=filtro.tipoOrdem%>">
+					<button onclick="esperar()" class="btn btn-success my-2 my-sm-1 mb-1" type="submit">Buscar</button>
+				</form>
+			</nav>
+			<br>
+
+			<table class="table table-striped" id="tabela">
+				<thead>
+				<tr>
+					<th onclick="ordenar('src')" id="src" scope="col">Ramal</th>
+					<th scope="col">Tempo Ativo</th>
+					<th scope="col" id="">TMA Ativo</th>
+					<th scope="col" id="">TMA Receptivo</th>
+					<th scope="col" id="">TMA Total</th>
+					<th scope="col" id="">Recebidas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Efetuadas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Atendidas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">N.A.</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Ocupadas</th>
+					<th style="background-color: rgb(231, 231, 231);" scope="col" id="">Falhas</th>
+				</tr>
+				</thead>
+				<tbody id="lista">		
+					<%vendedores.forEach(v=>{%>
+						<tr>
+							<td><%=v.ramal%></td>
+							<td><%=v.tempoTot%></td>
+							<td><%=v.tmaAtivo%></td>
+							<td><%=v.tmaReceptivo%></td>
+							<td><%=v.tmaTot%></td>
+							<td><%=v.ligRecebidas%></td>
+							<td><%=v.ligEfetuadas%></td>
+							<td><%=v.atendidas%></td>
+							<td><%=v.na%></td>
+							<td><%=v.ocupadas%></td>
+							<td><%=v.falhas%></td>
+						</tr>
+					<%})%>
+				
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
+
+	<%- include ("../partials/footer.ejs"); %>
+	<script>
+		function ordenar(order){
+			let form = document.getElementById('form-qualidade');
+			
+			var ordem = document.getElementById("ordem");
+			var tipoOrdem = document.getElementById("tipoOrdem");
+
+			if(order == ordem.value){
+				if(tipoOrdem.value == "DESC"){
+					tipoOrdem.value = "ASC"
+				}else{
+					tipoOrdem.value = "DESC"
+				}
+			}			
+			ordem.value = order;
+
+			var hr = document.getElementById(order)
+			hr.removeAttribute("onclick")
+			hr.style.color = "#b1b1b1"
+			
+			form.submit()	
+
+		}
+	</script>
+
+	<script>
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1')
+
+		}
+		function esperar(){			
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1 disabled')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1 disabled')
+		}
+		
+		function enableBtn(){
+			document.getElementById("bt-csv").setAttribute('class', 'btn btn-outline-success mb-2 mr-1')
+			document.getElementById("bt-pdf").setAttribute('class', 'btn btn-outline-danger mb-2 mr-1')
+
+		}
+		setTimeout(function(){enableBtn()}, 3000)	
+	</script>
+
+
+	<script>
+	var totAtivas = document.getElementById("totAtivas").innerHTML;
+	var atendidas = document.getElementById('atendidas').innerHTML;
+	var na = document.getElementById("na").innerHTML;
+	var ocupadas = document.getElementById("ocupadas").innerHTML;
+	var falhas = document.getElementById("falhas").innerHTML;
+
+	atendidas = ((atendidas *100)/totAtivas).toFixed(2);
+	na = ((na *100)/totAtivas).toFixed(2);
+	ocupadas = ((ocupadas *100)/totAtivas).toFixed(2);
+	falhas = ((falhas *100)/totAtivas).toFixed(2);
+		
+		const labels = [
+			'Atendidas',
+			'Não Atendidas',
+			'Ocupadas',
+			'Falhas',
+		];
+
+		const data = {
+			labels: labels,
+			datasets: [{
+			label: 'Status das Ligações',
+			backgroundColor: ["#2E8B57","#4169E1","#D2691E","#B22222"],
+			borderColor: '#B0C4DE',
+			data: [atendidas,na,ocupadas,falhas],
+			}]
+		};
+
+		const config = {
+				type: 'pie',
+				data: data,
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							display: false,							
+						}
+					},
+				}
+			};
+	</script>
+	<script>
+		const myChart = new Chart(
+		  document.getElementById('statusLigacoes'),
+		  config
+		);
+	</script>
+	   
+	
+</body>
+</html>

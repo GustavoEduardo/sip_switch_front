@@ -1,36 +1,33 @@
 const express = require('express');
 const app = express();
+const routes = require("./routes/routes");
+require('dotenv').config();
+const auth = require("./middlewares/auth");
 
-
-
-//Controllers
-const atendimentoController = require("./controllers/atendimentoController");
-
-
-app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
+app.use(express.static("arquivos"));
 
 app.use(express.json({limit: '150mb'}));
-app.use(express.urlencoded({ extended: false }));
-
-//rotas
+app.use(routes);
+app.set('view engine', 'ejs');
 
 //pagina Home
+app.post('/home',auth, (req, res) => {
+	let token= req.body.token
+	let tipo= req.body.tipo
+	res.render("home",{token, tipo});
+});
+//Página de login
 app.get('/', (req, res) => {
-	res.redirect("/");	
+	res.render("usuario/login",{erro:{}});	
 });
 
-
-//Routers
-
-app.use('/',atendimentoController);
-
-
 //Iniciando o servidor
-app.listen(4001,(err) =>{
+app.listen(4000,(err) =>{
 	if(err){
 		console.log(err)
 	}else{
-		console.log("Front rodando na porta 4001.")
+		console.log("Sip rodando na porta 4000.")
 	}
 });

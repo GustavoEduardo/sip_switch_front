@@ -1,0 +1,34 @@
+
+<%- include ("partials/head.ejs"); %>
+<link rel="stylesheet" type="text/css" href="/css/home.css">
+
+<body onload="setToken()" style="background-color: rgb(230, 230, 230);">
+	<%- include ("partials/header.ejs"); %>
+	<div class="gradient" style="text-align: center;">
+		<div class="centro" style="margin-top: -3%;">
+			<div class="logo">
+				<h1 class="display-1">Sip Switch</h1>
+				<h6 class="display-4">Bem vindo</h6>
+			</div>		
+		</div>		
+	</div>
+	<input id="token" type="hidden" value="<%=token%>">
+	<input id="tipo" type="hidden" value="<%=tipo%>">
+
+
+	<script>
+		window.onload = function setToken(){
+		   var token = document.getElementById("token").value;	
+		   localStorage.setItem('token',token);
+		   getToken()
+		   var tipo = document.getElementById("tipo").value;	
+		   localStorage.setItem('tipo',tipo);
+
+		   getTipo()
+	   }			
+   </script>
+
+	<%- include ("partials/footer.ejs"); %>	
+	
+</body>
+</html>

@@ -1,0 +1,39 @@
+.gradient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 92vh;
+  width: 100vw;
+  /* background: linear-gradient(45deg, #f1eff3, #e0dde7, #d6cfe7, #beb3d6); */
+  background: linear-gradient(45deg, #f1eff3, #edecf1, #c8c3d3, #a9a6b3);
+  background-size: 300% 300%;
+  animation: colors 15s ease infinite;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 5rem;
+  color: #fff;
+  border: 3px solid #fff;
+  padding: 2rem 4rem;
+}
+
+@keyframes colors{
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+
+}
