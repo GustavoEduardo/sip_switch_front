@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const path = require("path");
 const fs = require("fs");
+require('dotenv').config();
 
 class Email{
 
@@ -8,16 +9,16 @@ class Email{
         try { 
             //587 false
             const transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
+                host: process.env.EMAIL_HOST,
                 port: 465,
                 secure: true,
                 auth: {
-                    user: "sipswitchsistema@gmail.com",
-                    pass: "mudar123"
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
                 }
             })
             let msg = {
-                from: "sipswitchsistema@gmail.com",
+                from: process.env.EMAIL_USER,
                 to:data.to,
                 subject: data.message.subject,
                 text: data.message.body.replace(/(<([^>]+)>)/ig, ""),

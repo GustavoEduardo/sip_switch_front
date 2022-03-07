@@ -160,7 +160,8 @@ class RelatorioController{
                     if(r.dstchannel[barra+5] == "@"){                
                         if(ramais.includes(ramal)){
                             atualizaVendedores(ramal, r)
-                        }else{                            
+                        }else{
+                            ramais.push(ramal)                          
                             let vendNovo = {
                                 ramal: ramal,
                                 tempoReceptivo: 0,
@@ -176,7 +177,7 @@ class RelatorioController{
                                 ocupadas:0,
                                 falhas:0
                             }
-                            console.log("Não recebei ligou só recebeu>>>>>>>>>>>>> "+ramal)
+                            console.log("Não ligou só recebeu>>>>>>>>>>>>> "+ramal)
                             vendedores.push(vendNovo)
                             atualizaVendedores(ramal, r)
                         }
@@ -185,6 +186,8 @@ class RelatorioController{
                             if(ramais.includes(ramal)){
                                 atualizaVendedores(ramal, r)
                             }else{
+                                ramais.push(ramal)
+                                console.log("Não ligou só recebeu--------------> "+ramal)
                                 let vendNovo = {
                                     ramal: ramal,
                                     tempoReceptivo: 0,
