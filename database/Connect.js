@@ -8,7 +8,9 @@ let Connect = knex({
         user : process.env.DATABASE_USER,
         port: 3306,
         password : process.env.DATABASE_PASSWORD,
-        database :process.env.DATABASE_DATABASE
+        database :process.env.DATABASE_DATABASE,
+        timezone: 'UTC',
+        charset  : 'utf8mb4'
     }
 });
 

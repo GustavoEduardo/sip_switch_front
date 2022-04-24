@@ -6,6 +6,7 @@ require('dotenv').config();
 class Email{
 
     async send(data){  
+        console.log(data)
         try { 
             //587 false
             const transporter = nodemailer.createTransport({

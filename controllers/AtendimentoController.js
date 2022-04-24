@@ -18,6 +18,7 @@ class AtendimentoController{
         let filtro = {
                ...req.body
             }
+
         try {
             var midias = await Connect("midia").select();
             var numeros = await Connect("cdr").select().where({userfield:filtro.telefone}).andWhere("calldate",">=",filtro.dtInit)
