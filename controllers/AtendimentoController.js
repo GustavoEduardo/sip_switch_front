@@ -86,12 +86,12 @@ class AtendimentoController{
     
             data.map((call)=>{
                 if(call.src !="anonymous"){
-                    var mais = call.src.substr(1, 1)
+                    var mais = call.src.substr(0, 1)
                     if(mais == "+"){
                         var ddd = call.src.substr(4, 2)
-                        var tel = call.src.substr(5)
+                        var tel = call.src.substr(6)
                     }else{
-                        var ddd = call.src.substr(1, 2)
+                        var ddd = call.src.substr(0, 2)
                         var tel = call.src.substr(2)
                     }
                     
