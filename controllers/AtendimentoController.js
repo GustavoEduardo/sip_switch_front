@@ -1,6 +1,7 @@
 const Connect  = require('../database/Connect');
 const fs = require('fs');
 const moment = require('moment');
+const { Console } = require('console');
 
 class AtendimentoController{
 
@@ -33,7 +34,7 @@ class AtendimentoController{
         }       
         
         let result = numeros;
-
+        AbortController.log(result.length)
 
         //filtra data final e conta anonymous
         var anonymous = 0;
