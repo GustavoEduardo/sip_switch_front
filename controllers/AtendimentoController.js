@@ -10,7 +10,7 @@ class AtendimentoController{
             hrFim:"23:59:00"            
         }
         let midias = await Connect("midia").select();
-        return res.render("atendimentos", {result:[], midias, filtro, erro:[], anonymous:""}); 
+        return res.render("atendimentos", {result:[], midias, filtro,encontradas:"", erro:[], anonymous:""}); 
 
     }    
 
