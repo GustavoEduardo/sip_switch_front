@@ -242,20 +242,9 @@ class RelatorioController{
             vendedores[i].tmaTot = segParaHora(vendedores[i].tmaTot)
         }
 
-       
-        //cria csv
-        async function criarCsv(data, agr){
-            var content = "Ramal;Tempo Total;TMA Ativo;TMA Receptivo;TMA Total;Efetuadas;Atendidas;NA;Ocupadas;Falhas;data-do-documento: "+agr+"\n"  
-    
-            data.map((d)=>{
-                content = content+d.ramal+";"+d.tempoTot+";"+d.tmaAtivo+";"+d.tmaReceptivo+";"+d.tmaTot+";"+d.ligEfetuadas+";"+d.atendidas+";"+d.na+";"+d.ocupadas+";"+d.falhas+"\n"
-            })    
-            await fs.writeFileSync('arquivos/produtividade.csv', content)             
-    
-        }
         let agr = moment().format("YYYY-MM-DD HH:mm:ss")
         criarCsv(vendedores, agr)
-
+        
         //cria pdf
         ejs.renderFile('./helpers/pdf/produtividade.ejs',{vendedores,agr},(err, html)=>{
             if(err){
@@ -272,14 +261,25 @@ class RelatorioController{
                 };
     
                 pdf.create(html, options).toFile("./arquivos/produtividade.pdf", (error, response)=>{
-                    if(err){
-                        console.log("Erro ao gerar PDF de produtividade")
+                    if(error){
+                        console.log("Erro ao gerar PDF")
                     }else{
                         console.log("Pdf de produtividade criado")
                     }
                 })
             }            
         })
+
+        //cria csv
+        async function criarCsv(data, agr){
+            var content = "Ramal;Tempo Total;TMA Ativo;TMA Receptivo;TMA Total;Efetuadas;Atendidas;NA;Ocupadas;Falhas;data-do-documento: "+agr+"\n"  
+    
+            data.map((d)=>{
+                content = content+d.ramal+";"+d.tempoTot+";"+d.tmaAtivo+";"+d.tmaReceptivo+";"+d.tmaTot+";"+d.ligEfetuadas+";"+d.atendidas+";"+d.na+";"+d.ocupadas+";"+d.falhas+"\n"
+            })    
+            await fs.writeFileSync('arquivos/produtividade.csv', content)             
+    
+        }
        
         return res.render("relatorio/qualidadeVendedores", {filtro, vendedores, totais, erro:{}});
 
