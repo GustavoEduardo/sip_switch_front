@@ -31,7 +31,7 @@ class AtendimentoController{
                 erro: e,
                 codigo: 400
             }
-            return res.render("atendimentos", {result:[], midias, filtro:[], erro, anonymous:"", midias: []}); 
+            return res.render("atendimentos", {result:[], midias, filtro:[], erro,encontradas: "", anonymous:"", midias: []}); 
         }       
         
         let result = numeros;
