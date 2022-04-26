@@ -245,10 +245,10 @@ class RelatorioController{
        
         //cria csv
         async function criarCsv(data, agr){
-            var content = "Ramal,Tempo Total,TMA Ativo,TMA Receptivo, TMA Total,Efetuadas,Atendidas,NA,Ocupadas,Falhas,data-do-documento: "+agr+"\n"  
+            var content = "Ramal;Tempo Total;TMA Ativo;TMA Receptivo;TMA Total;Efetuadas;Atendidas;NA;Ocupadas;Falhas;data-do-documento: "+agr+"\n"  
     
             data.map((d)=>{
-                content = content+d.ramal+","+d.tempoTot+","+d.tmaAtivo+","+d.tmaReceptivo+","+d.tmaTot+","+d.ligEfetuadas+","+d.atendidas+","+d.na+","+d.ocupadas+","+d.falhas+"\n"
+                content = content+d.ramal+";"+d.tempoTot+";"+d.tmaAtivo+";"+d.tmaReceptivo+";"+d.tmaTot+";"+d.ligEfetuadas+";"+d.atendidas+";"+d.na+";"+d.ocupadas+";"+d.falhas+"\n"
             })    
             await fs.writeFileSync('arquivos/produtividade.csv', content)             
     
