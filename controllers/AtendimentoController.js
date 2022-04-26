@@ -39,7 +39,7 @@ class AtendimentoController{
         //conta anonymous
         var anonymous = 0;
         let numeros2 = [];
-        numeros.map(n=>{
+        numeros.map(n=>{            
             if(n.src =="anonymous"){
                 anonymous++
             }else{
@@ -82,17 +82,29 @@ class AtendimentoController{
         result = numeros2
 
         async function criarCsv(data, agr){
-            var content = "telefone,data,hora,data-do-documento: "+agr+"\n"
+            var content = "DDD;TELEFONE;DATA;HORA;data-do-documento: "+agr+"\n"
     
             data.map((call)=>{
                 if(call.src !="anonymous"){
-                    content = content+call.src+","+call.data+","+call.hora+"\n"
+                    var mais = call.src.substr(1, 1)
+                    if(mais == "+"){
+                        var ddd = call.src.substr(4, 2)
+                        var tel = call.src.substr(5)
+                    }else{
+                        var ddd = call.src.substr(1, 2)
+                        var tel = call.src.substr(2)
+                    }
+                    
+
+                    content = content+ddd+";"+tel+";"+call.data+";"+call.hora+"\n"
                 }
             })
     
             await fs.writeFileSync('arquivos/ligacoes.csv', content)    
     
         }
+
+
         let agr = moment().format("YYYY-MM-DD HH:mm:ss")
         criarCsv(result, agr)
         var encontradas = result.length + anonymous
