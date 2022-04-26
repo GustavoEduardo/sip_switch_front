@@ -40,39 +40,43 @@ class AtendimentoController{
         var anonymous = 0;
         let numeros2 = [];
         numeros.map(n=>{
-            if(n.src =="anonymous") anonymous++;
-            var data;
-            if(n.calldate.getMonth()+1 < 10){                        
-                if(n.calldate.getDate() < 10){
-                    data = `${n.calldate.getFullYear()}-0${n.calldate.getMonth()+1}-0${n.calldate.getDate()}`
-                }else{
-                    data = `${n.calldate.getFullYear()}-0${n.calldate.getMonth()+1}-${n.calldate.getDate()}`
-                }
+            if(n.src =="anonymous"){
+                anonymous++
             }else{
-                if(n.calldate.getDate() < 10){
-                    data = `${n.calldate.getFullYear()}-${n.calldate.getMonth()+1}-0${n.calldate.getDate()}`
+                var data;
+                if(n.calldate.getMonth()+1 < 10){                        
+                    if(n.calldate.getDate() < 10){
+                        data = `${n.calldate.getFullYear()}-0${n.calldate.getMonth()+1}-0${n.calldate.getDate()}`
+                    }else{
+                        data = `${n.calldate.getFullYear()}-0${n.calldate.getMonth()+1}-${n.calldate.getDate()}`
+                    }
                 }else{
-                    data = `${n.calldate.getFullYear()}-${n.calldate.getMonth()+1}-${n.calldate.getDate()}`
+                    if(n.calldate.getDate() < 10){
+                        data = `${n.calldate.getFullYear()}-${n.calldate.getMonth()+1}-0${n.calldate.getDate()}`
+                    }else{
+                        data = `${n.calldate.getFullYear()}-${n.calldate.getMonth()+1}-${n.calldate.getDate()}`
+                    }
                 }
-            }
-            let dtBR= data.split('-')
-            n.data = `${dtBR[2]}/${dtBR[1]}/${dtBR[0]}`;
+                let dtBR= data.split('-')
+                n.data = `${dtBR[2]}/${dtBR[1]}/${dtBR[0]}`;
 
-            //arruma horario ara exibição no front
-            var h = new Date(n.calldate)
-            var hora = h.getUTCHours();
-            var min = h.getUTCMinutes();
+                //arruma horario ara exibição no front
+                var h = new Date(n.calldate)
+                var hora = h.getUTCHours();
+                var min = h.getUTCMinutes();
 
-            if(min < 10){
-                var horario = hora + ':0' + min;
-            }else{
-                var horario = hora + ':' + min;
-            }
+                if(min < 10){
+                    var horario = hora + ':0' + min;
+                }else{
+                    var horario = hora + ':' + min;
+                }
 
-            n.hora = horario;
+                n.hora = horario;
 
 
-            numeros2.push(n)         
+                numeros2.push(n)
+
+                }         
                 
         })        
         result = numeros2
@@ -81,7 +85,9 @@ class AtendimentoController{
             var content = "telefone,data,hora,data-do-documento: "+agr+"\n"
     
             data.map((call)=>{
-                content = content+call.src+","+call.data+","+call.hora+"\n"
+                if(call.src !="anonymous"){
+                    content = content+call.src+","+call.data+","+call.hora+"\n"
+                }
             })
     
             await fs.writeFileSync('arquivos/ligacoes.csv', content)    
@@ -89,7 +95,8 @@ class AtendimentoController{
         }
         let agr = moment().format("YYYY-MM-DD HH:mm:ss")
         criarCsv(result, agr)
-        res.render("atendimentos", {result, filtro, midias, erro:[], anonymous});        
+        var encontradas = result.length + anonymous
+        res.render("atendimentos", {result, filtro,encontradas, midias, erro:[], anonymous});        
 
     }  
 
