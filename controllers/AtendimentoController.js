@@ -54,14 +54,27 @@ class AtendimentoController{
                 }else{
                     data = `${n.calldate.getFullYear()}-${n.calldate.getMonth()+1}-${n.calldate.getDate()}`
                 }
-            }                      
-           
+            }
             let dtBR= data.split('-')
             n.data = `${dtBR[2]}/${dtBR[1]}/${dtBR[0]}`;
-            numeros2.push(n)           
+
+            //arruma horario ara exibição no front
+            var h = new Date(n.calldate)
+            var hora = h.getUTCHours();
+            var min = h.getUTCMinutes();
+
+            if(min < 10){
+                var horario = hora + ':0' + min;
+            }else{
+                var horario = hora + ':' + min;
+            }
+
+            n.hora = horario;
+
+
+            numeros2.push(n)         
                 
-        })
-        
+        })        
         result = numeros2
 
         async function criarCsv(data, agr){
