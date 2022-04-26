@@ -33,7 +33,7 @@ class RelatorioController{
             let query = Connect.select().table("cdr")
             .whereBetween("calldate",[de,ate])
             .whereNot("src", "<", 1000).whereNot("src", ">", 5000)
-            // .whereNot("userfield", "<", 1000).whereNot("userfield", ">", 5000)// Só tras as atendidas
+            // .whereNot("userfield", "<", 1000).whereNot("userfield", ">", 5000)// Só traz as atendidas
             
 
             if(filtro.ramal){
