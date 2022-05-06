@@ -23,7 +23,17 @@ class AtendimentoController{
 
         try {
             var midias = await Connect("midia").select();
-            var numeros = await Connect("cdr").select().where({userfield:filtro.telefone}).whereBetween('calldate',[de,ate])
+            var query =  Connect("cdr").select().whereBetween('calldate',[de,ate])
+            
+            if(filtro.telefone){
+                query.where({userfield:filtro.telefone})
+            }else{
+                let midiaTels = midias.map(m=> m.telefone)
+                filtro.telefone = "Todas as Mídias"
+                query.whereIn("userfield",[...midiaTels])
+            }
+
+            var numeros = await query;
             
         } catch (e) {
             let erro = {
