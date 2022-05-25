@@ -46,20 +46,60 @@ class UsuarioController{
 
     async editar(req,res){
         let id_usuario= req.params.id;
-        let usuario = await Connect("usuario").select().where({id_usuario});
-        return res.render("usuario/edit", {usuario: usuario[0]});
+        let usuario = await Connect("usuario").select().where({id_usuario})
+        
+        let midias_do_usuario = await Connect("midia").select()
+        .innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+        .where({"usuario_midia.id_usuario": req.params.id})
+
+        let midias = await Connect("midia").select()
+
+        return res.render("usuario/edit", {usuario: usuario[0], midias_do_usuario, midias});
+
     }
 
     async update(req,res){
         let usuario = {
             nome: req.body.nome,
-            email: req.body.email
+            email: req.body.email,
+            tipo: req.body.tipo
         }
         usuario.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
         await Connect("usuario").update(usuario).where({id_usuario: req.body.id_usuario});
-        
         let usuarios = await Connect("usuario").select("id_usuario","nome","email");
         return res.render("usuario/index", {usuarios});
+    }
+
+    async removeMidia(req,res){
+        let id_usuario = req.params.id
+        let id_midia = req.body.id_midia
+        await Connect("usuario_midia").delete().where({id_usuario}).andWhere({id_midia});
+        
+        let usuario = await Connect("usuario").select().where({id_usuario})
+        let midias = await Connect("midia").select()
+        let midias_do_usuario = await Connect("midia").select()
+        .innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+        .where({"usuario_midia.id_usuario": req.params.id})
+        return res.render("usuario/edit", {usuario: usuario[0], midias_do_usuario, midias})
+    }
+
+    async addMidia(req,res){
+        let id_usuario = req.params.id
+        let id_midia = req.body.id_midia_add
+
+        let ja_existe = await Connect("usuario_midia").select()
+        .where({id_usuario}).andWhere({id_midia});
+
+        if(ja_existe.length ==0){
+            await Connect("usuario_midia").insert({id_usuario, id_midia});
+        }
+        
+        let usuario = await Connect("usuario").select().where({id_usuario})
+        let midias = await Connect("midia").select()
+        let midias_do_usuario = await Connect("midia").select()
+        .innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+        .where({"usuario_midia.id_usuario": req.params.id})
+        return res.render("usuario/edit", {usuario: usuario[0], midias_do_usuario, midias})
     }
 
     async login(req, res){
@@ -193,7 +233,7 @@ class UsuarioController{
         
                  
         
-    }
+    }    
 
 }
 

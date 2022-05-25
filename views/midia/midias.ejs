@@ -4,10 +4,13 @@
 <body style="background-color: rgba(230, 230, 230, 0.555);">
 	<%- include ("../partials/header.ejs"); %>
 
-	<div class="centro" style="margin-top: -5%;">
+	<div class="centro" >
 		<h1>Lista de Mídias Cadastradas</h1>
 		<br>
-		<a href="/midia-cadastrar" title="Cadastrar nova Mídia"  class="btn btn-lg btn-outline-success mb-2" style="border-radius: 50%;"><i class="fas fa-plus"></i></a>
+		<%if(tipo == 'admin'){%>
+			<a href="/midia-cadastrar" title="Cadastrar nova Mídia"  class="btn btn-lg btn-outline-success mb-2" style="border-radius: 50%;"><i class="fas fa-plus"></i></a>
+		<%}%>
+		
 		<hr>		
 		<div style="border:1px solid rgb(151, 151, 151); width: 75%; background-color: white;">
 			<table class="table table-striped" id="tabela">
@@ -57,7 +60,7 @@
 				form.submit();
 			}
 		}
-		</script>
+	</script>
 	
 </body>
 </html>

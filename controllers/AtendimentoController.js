@@ -9,7 +9,14 @@ class AtendimentoController{
             hrInit:"00:00:00",
             hrFim:"23:59:00"            
         }
-        let midias = await Connect("midia").select();
+        let query = Connect("midia").select()
+        
+        if(req.tipo != "admin"){
+            query.innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+            query.where({id_usuario: req.id})
+        }
+        
+        let midias = await query
         return res.render("atendimentos", {result:[], midias, filtro,encontradas:"", erro:[], anonymous:""}); 
 
     }    

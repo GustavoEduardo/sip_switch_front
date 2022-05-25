@@ -6,8 +6,43 @@
 
 	
 	<div class="container" style="background-color: rgb(226, 224, 224); margin-top: 5%; padding: 8px 8px 25px 8px; border: 1px solid rgb(173, 173, 173);">
-			<h1>Cadastro de novo Usuário</h1>
+			<h1>Editar Usuário</h1>
 			<hr>
+			<%if(usuario.tipo != "admin"){%>				
+				<div class="row ml-1 mb-3">
+					<form class="form-group col-md-3" method="post" action="/usuario-addmidia/<%=usuario.id_usuario%>">
+						<label style="color: rgb(44, 44, 44); font-weight: bold;" for="exampleFormControlInput5">Selecione uma mídia para conceder o acesso ao usuário</label>
+						<select class="form-control mr-2 mb-1" id="tel" name="id_midia_add" onchange="this.form.submit()">
+							<option value=""> Selecione </option>
+							<%midias.forEach(m=>{%>
+								<option value="<%=m.id_midia%>"><%=m.nome%></option>
+							<%})%>								
+						</select>
+					</form>
+					<div class="col-md-8">
+						<table class="table table-striped ml-2">
+							<thead>
+								<th>Lista de Midias do usuário</th>
+							</thead>
+							<tbody>
+							<%midias_do_usuario.forEach(m=>{%>
+								<tr>
+									<td style="color: rgb(21, 21, 21); font-weight: bold;">
+										<form style="display: inline;" method="post" action="/usuario-removemidia/<%=usuario.id_usuario%>" onsubmit="confirmaExclusao(event,this)">
+											<input name="token" type="hidden" class="token">
+											<input type="hidden" name="id_midia" value="<%=m.id_midia%>">
+											<button type="submit" class="btn btn-outline-danger mr-5" > Remover Acesso </button>
+										</form>	
+										Tel: <%=m.telefone%> - <%-m.nome%>
+									</td>
+								</tr>
+							<%})%>
+							</tbody>
+						</table>	
+					</div>
+				</div>
+				<hr>
+			<%}%>
 			<form method="post" action="/alterarusuario">
 				<input name="token" type="hidden" class="token">
 				<div class="form-group col-md-8">
@@ -18,14 +53,15 @@
 					<label for="exampleFormControlInput2">Email</label>
 					<input type="email" class="form-control" id="exampleFormControlInput2" name="email" value="<%=usuario.email%>" required>
 				</div>
-				<div class="form-group col-md-4 mb-5">
+				<div class="form-group col-md-4 mb-4">
 					<label for="exampleFormControlInput5">Tipo</label>
 					<select class="form-control" id="exampleFormControlInput5" name="tipo" value="comum" required>
 						<option value=""> selecione </option>
 						<option value="supervisor">Supervisor</option>
 						<option value="admin">Admin</option>
 					</select>
-				</div>
+				</div>			
+								
 				<input type="hidden" value="<%=usuario.id_usuario%>" name="id_usuario">					
 				
 				<button class="btn btn-lg btn-info" style="width: 100%;">Salvar</button>
@@ -37,6 +73,15 @@
 	</div>	
 
 	<%- include ("../partials/footer.ejs"); %>
+	<script>		
+		function confirmaExclusao(event, form){
+			event.preventDefault();//não executa o evento.
+			var decision = confirm("Quer mesmo Remover o acesso do usuário a essa mídia?");//Caixa com opção ok ou cancelar
+			if(decision){
+				form.submit();
+			}
+		}
+	</script>
 	
 </body>
 </html>

@@ -8,7 +8,6 @@ let auth = (req,res,next,) => {
         data: {}
     };
     try {
-      console.log(req.tipo)
       if(req.tipo != "admin"){
         throw "Acesso não autorizado para esta serviço"
       }

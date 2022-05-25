@@ -9,6 +9,8 @@ usuarioRoutes.route('/usuario-cadastrar').get(Controller.novo);
 usuarioRoutes.route('/usuario-cadastrar').all(auth).post(Controller.create);
 usuarioRoutes.route('/usuario-deletar').all(auth).post(Controller.delete);
 usuarioRoutes.route('/usuario-editar/:id').get(Controller.editar);
+usuarioRoutes.route('/usuario-removemidia/:id').post(Controller.removeMidia);
+usuarioRoutes.route('/usuario-addmidia/:id').post(Controller.addMidia);
 usuarioRoutes.route('/alterarusuario').all(auth).post(Controller.update);
 
 usuarioRoutes.route('/login').get(Controller.login);

@@ -5,8 +5,14 @@ const moment = require('moment');
 class MidiaController{
 
     async listar(req,res){
-        let midias = await Connect("midia").select();
-        return res.render("midia/midias", {midias});
+        let query = Connect("midia").select()
+        if(req.tipo != "admin"){
+            query.innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+            query.where({id_usuario: req.id})
+        }
+
+        let midias = await query
+        return res.render("midia/midias", {midias, tipo:req.tipo});
     }
 
     async nova(req,res){        
