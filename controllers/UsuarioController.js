@@ -10,7 +10,7 @@ const EmailTemplateService = require('../helpers/email/EmailTemplateService');
 class UsuarioController{
 
     async listar(req,res){
-        let usuarios = await Connect("usuario").select("id_usuario","nome","email");
+        let usuarios = await Connect("usuario").select("id_usuario","nome","email","tipo");
         return res.render("usuario/index", {usuarios});
     }
 
@@ -66,7 +66,7 @@ class UsuarioController{
         }
         usuario.modificado = moment().format('YYYY-MM-DD HH:mm:ss')
         await Connect("usuario").update(usuario).where({id_usuario: req.body.id_usuario});
-        let usuarios = await Connect("usuario").select("id_usuario","nome","email");
+        let usuarios = await Connect("usuario").select("id_usuario","nome","email","tipo");
         return res.render("usuario/index", {usuarios});
     }
 

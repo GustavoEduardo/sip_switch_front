@@ -58,7 +58,7 @@ class MidiaController{
         await Connect("midia").update(midia).where({id_midia: req.body.id_midia});
         
         let midias = await Connect("midia").select();
-        return res.render("midia/midias", {midias});
+        return res.render("midia/midias", {midias, tipo:req.tipo});
     }    
 
 
