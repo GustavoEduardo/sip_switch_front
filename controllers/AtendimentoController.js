@@ -29,15 +29,23 @@ class AtendimentoController{
             let ate = filtro.dtFim+" "+filtro.hrFim
 
         try {
-            var midias = await Connect("midia").select();
+            if(req.tipo == "admin"){
+                var midias = await Connect("midia").select();
+            }else{
+                var midias = await Connect("midia").select() 
+                .innerJoin('usuario_midia','usuario_midia.id_midia','midia.id_midia')
+                .where({id_usuario: req.id})                
+            }
+            
             var query =  Connect("cdr").select().whereBetween('calldate',[de,ate])
             
             if(filtro.telefone){
                 query.where({userfield:filtro.telefone})
-            }else{
+            }else {
                 let midiaTels = midias.map(m=> m.telefone)
                 filtro.telefone = "Todas as Mídias"
                 query.whereIn("userfield",[...midiaTels])
+                console.log(midiaTels)
             }
 
             var numeros = await query;

@@ -20,7 +20,7 @@
 					</div>			
 				<div class="form-group">
 				<label for="exampleFormControlTextarea1">Descrição</label>
-				<textarea placeholder="Uma breve descrição pode ajudar na hora de identificar a mídia." name="descricao" class="form-control" id="exampleFormControlTextarea1" rows="3" required><%=midia.descricao%></textarea>
+				<textarea maxlength="100" placeholder="Uma breve descrição pode ajudar na hora de identificar a mídia." name="descricao" class="form-control" id="exampleFormControlTextarea1" rows="3" required><%=midia.descricao%></textarea>
 				</div>
 				<input type="hidden"name="id_midia" value="<%=midia.id_midia%>" required>
 				<button class="btn btn-lg btn-info" style="width: 100%;">Salvar</button>

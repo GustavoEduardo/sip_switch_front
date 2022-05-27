@@ -14,19 +14,19 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav ml-auto">
-      <form method="post" action="atendimentos">
+      <form method="post" action="/atendimentos">
         <input name="token" type="hidden" class="token" >
         <button type="submit" class="nav-item nav-link btn btn-link active mr-1 "><i class="fas fa-home "></i> Ligações Recebidas</button>
       </form>
-      <form method="post" action="relatorios-vendedores">
+      <form method="post" action="/relatorios-vendedores">
         <input name="token" type="hidden" class="token">
         <button class="nav-item nav-link btn btn-link active mr-1 "><i class="fas fa-chart-line"></i> Qualidade do Vendedor</button>
       </form>
-      <form method="post" action="midias">
+      <form method="post" action="/midias">
         <input name="token" type="hidden" class="token">
         <button class="nav-item nav-link btn btn-link active mr-1 "><li class="fas fa-file-signature "></li> Mídias</button>
       </form>     
-      <form style="display: none;" id="opAdmin" method="post" action="usuarios">
+      <form style="display: none;" id="opAdmin" method="post" action="/usuarios">
         <input name="token" type="hidden" class="token">
         <button type="submit" class="nav-item nav-link btn btn-link active mr-1 " ><i class="fas fa-users"></i> Usuários</button>
       </form>     

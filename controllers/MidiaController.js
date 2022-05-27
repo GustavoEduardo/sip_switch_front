@@ -31,7 +31,8 @@ class MidiaController{
         await Connect("midia").insert(midia);
         
         let midias = await Connect("midia").select();
-        return res.render("midia/midias", {midias});
+        
+        return res.render("midia/midias", {midias, tipo: req.tipo});
     }
 
     async delete(req,res){
@@ -39,13 +40,13 @@ class MidiaController{
         await Connect("midia").delete().where({id_midia});        
         
         let midias = await Connect("midia").select();
-        return res.render("midia/midias", {midias});
+        return res.render("midia/midias", {midias, tipo: req.tipo});
     }
 
     async editar(req,res){
         let id_midia = req.params.id;
         let midia = await Connect("midia").select().where({id_midia});
-        return res.render("midia/editarmidia", {midia: midia[0]});
+        return res.render("midia/editarmidia", {midia: midia[0],tipo:req.tipo});
     }
 
     async update(req,res){
