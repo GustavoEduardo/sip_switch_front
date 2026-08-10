@@ -52,6 +52,7 @@
 		<table class="table table-striped" id="tabela">
 			<thead>
 			  <tr>
+				<th scope="col">Mídia</th>
 				<th scope="col">Telefone</th>
 				<th scope="col">Data</th>
 				<th scope="col">Hora</th>
@@ -60,6 +61,7 @@
 			<tbody id="lista">
 			 <%result.forEach(r=>{%>
 				<tr>
+					<td><%=r.userfield%></td>
 					<td><%=r.src%></td>
 					<td><%=r.data%></td>
 					<td><%=r.hora%></td>

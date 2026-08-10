@@ -107,8 +107,8 @@ class AtendimentoController{
         result = numeros2
 
         async function criarCsv(data, agr){
-            var content = "DDD;TELEFONE;DATA;HORA;data-do-documento: "+agr+"\n"
-    
+            var content = "MIDIA;DDD;TELEFONE;DATA;HORA;data-do-documento: "+agr+"\n"
+
             data.map((call)=>{
                 if(call.src !="anonymous"){
                     var mais = call.src.substr(0, 1)
@@ -119,9 +119,10 @@ class AtendimentoController{
                         var ddd = call.src.substr(0, 2)
                         var tel = call.src.substr(2)
                     }
-                    
 
-                    content = content+ddd+";"+tel+";"+call.data+";"+call.hora+"\n"
+                    var midia = call.userfield ? call.userfield : ""
+
+                    content = content+midia+";"+ddd+";"+tel+";"+call.data+";"+call.hora+"\n"
                 }
             })
     
